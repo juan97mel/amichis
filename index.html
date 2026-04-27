@@ -456,11 +456,11 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
     <div id="aps2" class="ov-body" style="display:none">
       <div class="f-grp">
         <label class="f-lbl">Precio de compra *</label>
-        <div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ap-cost" type="number" placeholder="0" oninput="calcMargin()"/></div>
+        <div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ap-cost" type="text" inputmode="numeric" placeholder="0" oninput="fmtInput(this);calcMargin()"/></div>
       </div>
       <div class="f-grp">
         <label class="f-lbl">Precio de venta *</label>
-        <div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ap-price" type="number" placeholder="0" oninput="calcMargin()"/></div>
+        <div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ap-price" type="text" inputmode="numeric" placeholder="0" oninput="fmtInput(this);calcMargin()"/></div>
       </div>
       <div id="margin-card" class="margin-card" style="background:var(--bg)">
         <div><p class="f11 col-g mb4" style="font-weight:700">Margen calculado</p><p id="margin-val" style="font-size:22px;font-weight:800;color:#C4C2BD">—</p></div>
@@ -529,15 +529,36 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
   <!-- STOCK SHEET -->
   <div id="dimmer" onclick="closeSS()"></div>
   <div id="ssheet">
-    <div style="width:36px;height:4px;background:#E5E3DF;border-radius:2px;margin:0 auto 20px"></div>
+    <div style="width:36px;height:4px;background:#E5E3DF;border-radius:2px;margin:0 auto 16px"></div>
+    <!-- Header row -->
     <div class="row gap11 mb12">
-      <div id="ss-dot" style="width:52px;height:52px;border-radius:14px;flex-shrink:0;background-size:cover;background-position:center"></div>
-      <div style="flex:1"><p id="ss-name" class="f14 col-n" style="font-weight:800"></p><p id="ss-cat" class="f11 col-g mt4"></p></div>
+      <div id="ss-dot" style="width:48px;height:48px;border-radius:12px;flex-shrink:0;background-size:cover;background-position:center"></div>
+      <div style="flex:1"><p class="f11 col-g" style="font-weight:700;text-transform:uppercase;letter-spacing:.4px">Editando producto</p></div>
+      <button onclick="deleteProd()" style="background:#FFF0F2;color:var(--c);border:none;border-radius:10px;padding:7px 12px;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:5px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--c)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        Eliminar
+      </button>
     </div>
     <div class="sep mb12"></div>
+    <!-- Nombre -->
+    <div class="f-grp">
+      <label class="f-lbl">Nombre</label>
+      <input class="f-inp" id="ss-nombre" type="text" placeholder="Nombre del producto"/>
+    </div>
+    <!-- Categoría -->
+    <div class="f-grp">
+      <label class="f-lbl">Categoría</label>
+      <div class="cchips" id="ss-cats"></div>
+    </div>
+    <!-- Marca -->
+    <div class="f-grp">
+      <label class="f-lbl">Marca <span style="text-transform:none;font-weight:400;letter-spacing:0">(opcional)</span></label>
+      <input class="f-inp" id="ss-marca" type="text" placeholder="Ej: Royal Canin..."/>
+    </div>
+    <!-- Precios -->
     <div class="g2 mb8">
-      <div><p class="f-lbl">Precio compra</p><div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ss-cost" type="number" oninput="ssNotice()"/></div></div>
-      <div><p class="f-lbl">Precio venta</p><div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ss-price" type="number"/></div></div>
+      <div><p class="f-lbl">Precio compra</p><div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ss-cost" type="text" inputmode="numeric" placeholder="0" oninput="fmtInput(this);ssNotice()"/></div></div>
+      <div><p class="f-lbl">Precio venta</p><div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ss-price" type="text" inputmode="numeric" placeholder="0" oninput="fmtInput(this)"/></div></div>
     </div>
     <div id="ss-notice" class="notice mb12" style="display:none">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#92400E" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -547,6 +568,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
       <p class="f11 col-g mb8" style="font-weight:700;text-transform:uppercase;letter-spacing:.4px">Historial de costos</p>
       <div id="ss-hist-list"></div>
     </div>
+    <!-- Stock -->
     <p class="lbl mb8">Ajustar stock</p>
     <div class="row gap8 mb16" style="justify-content:center">
       <button onclick="ssAdj(-5)" style="background:var(--bg);color:var(--n);border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer">−5</button>
@@ -555,7 +577,44 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
       <button onclick="ssAdj(1)" style="background:var(--o);color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer">+1</button>
       <button onclick="ssAdj(5)" style="background:var(--o);color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer">+5</button>
     </div>
-    <button class="btn-o" style="width:100%;justify-content:center" onclick="saveSS()">Guardar</button>
+    <div class="col gap8">
+      <button class="btn-o" style="width:100%;justify-content:center" onclick="saveSS()">Guardar cambios</button>
+      <button class="btn-light" style="width:100%;text-align:center" onclick="closeSS()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- ── EDIT SALE OVERLAY ── -->
+  <div id="edit-sale" class="overlay" style="z-index:28">
+    <div class="ov-hdr">
+      <button class="ic-btn" onclick="closeEditSale()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2033" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <p class="ov-title">Editar venta</p>
+      <button class="ic-btn" onclick="closeEditSale()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="ov-body">
+      <!-- Sale summary (read-only) -->
+      <div id="es-summary" class="card mb16" style="background:#F9F8F6"></div>
+      <!-- Estado -->
+      <p class="f-lbl mb8">Estado</p>
+      <div class="row gap8 mb16" id="es-status-row">
+        <div id="es-st-comp" onclick="esSelStatus('completada')" style="flex:1;border:2px solid transparent;border-radius:14px;padding:12px;text-align:center;cursor:pointer;background:var(--w);transition:all .15s">
+          <p class="f12 col-n" style="font-weight:700">✓ Completada</p>
+        </div>
+        <div id="es-st-prep" onclick="esSelStatus('en-preparacion')" style="flex:1;border:2px solid transparent;border-radius:14px;padding:12px;text-align:center;cursor:pointer;background:var(--w);transition:all .15s">
+          <p class="f12 col-n" style="font-weight:700">⏳ En preparación</p>
+        </div>
+      </div>
+      <!-- Pago -->
+      <p class="f-lbl mb4">Método de pago</p>
+      <div class="pay-grid" id="es-pay-grid"></div>
+      <!-- Delete -->
+      <button onclick="deleteSale()" style="width:100%;background:#FFF0F2;color:var(--c);border:none;border-radius:16px;padding:14px;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--c)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        Eliminar esta venta
+      </button>
+    </div>
+    <div class="ov-foot">
+      <button class="btn-o" style="width:100%;justify-content:center" onclick="saveEditSale()">Guardar cambios</button>
+    </div>
   </div>
 
 </div><!-- /app -->
@@ -740,19 +799,25 @@ function renderStock(){
 }
 
 // ─── STOCK SHEET ─────────────────────────────────────
-let ssId=null, ssOrigCost=null;
+let ssId=null, ssOrigCost=null, ssCat=null;
+function renderSsCats(){
+  const el=document.getElementById('ss-cats'); if(!el)return;
+  el.innerHTML=CATS.map(c=>`<span class="cchip${c===ssCat?' on':''}" onclick="setSsCat('${c}')">${c}</span>`).join('');
+}
+function setSsCat(c){ ssCat=c; renderSsCats(); }
+
 function openSS(id){
   const p=PRODS.find(x=>x.id===id); if(!p) return;
-  ssId=id; ssOrigCost=p.cost;
+  ssId=id; ssOrigCost=p.cost; ssCat=p.cat;
   const bg=p.photo?`background-image:url('${p.photo}');background-size:cover;background-position:center`:`background:${p.bg}`;
-  document.getElementById('ss-dot').style.cssText=`width:52px;height:52px;border-radius:14px;flex-shrink:0;${bg}`;
-  document.getElementById('ss-name').textContent=p.name;
-  document.getElementById('ss-cat').textContent=p.cat;
-  document.getElementById('ss-cost').value=p.cost;
-  document.getElementById('ss-price').value=p.price;
+  document.getElementById('ss-dot').style.cssText=`width:48px;height:48px;border-radius:12px;flex-shrink:0;${bg}`;
+  document.getElementById('ss-nombre').value=p.name;
+  document.getElementById('ss-marca').value=p.marca||'';
+  setFmtVal('ss-cost', p.cost);
+  setFmtVal('ss-price', p.price);
   document.getElementById('ss-stock').textContent=p.stock;
   document.getElementById('ss-notice').style.display='none';
-  // History
+  renderSsCats();
   const hist=document.getElementById('ss-hist'), histList=document.getElementById('ss-hist-list');
   if(p.costHistory&&p.costHistory.length>1){
     hist.style.display='block';
@@ -767,17 +832,64 @@ function closeSS(){
   ssId=null;
 }
 function ssNotice(){
-  const newCost=parseFloat(document.getElementById('ss-cost').value)||0;
+  const newCost=getPriceVal('ss-cost')||0;
   document.getElementById('ss-notice').style.display=(ssId&&newCost&&newCost!==ssOrigCost)?'flex':'none';
 }
 function ssAdj(d){ const p=PRODS.find(x=>x.id===ssId); if(!p)return; p.stock=Math.max(0,p.stock+d); document.getElementById('ss-stock').textContent=p.stock; }
 function saveSS(){
   const p=PRODS.find(x=>x.id===ssId); if(!p) return;
-  const nc=parseFloat(document.getElementById('ss-cost').value)||p.cost;
-  const np=parseFloat(document.getElementById('ss-price').value)||p.price;
+  const nc=getPriceVal('ss-cost')||p.cost;
+  const np=getPriceVal('ss-price')||p.price;
+  const nombre=document.getElementById('ss-nombre').value.trim()||p.name;
+  const marca=document.getElementById('ss-marca').value.trim();
   if(nc!==p.cost){ p.costHistory=p.costHistory||[]; p.costHistory.push({date:today(),v:nc}); }
-  p.cost=nc; p.price=np;
-  renderStock(); closeSS();
+  p.cost=nc; p.price=np; p.name=nombre; p.cat=ssCat||p.cat; p.marca=marca;
+  renderStock(); renderStCats(); closeSS();
+}
+function deleteProd(){
+  const p=PRODS.find(x=>x.id===ssId); if(!p)return;
+  if(!confirm(`¿Eliminar "${p.name}"? Esta acción no se puede deshacer.`))return;
+  const idx=PRODS.findIndex(x=>x.id===ssId);
+  if(idx>-1) PRODS.splice(idx,1);
+  closeSS(); renderStock(); renderStCats();
+}
+
+// ─── EDIT SALE ───────────────────────────────────────
+let esId=null, esPay=null, esStatus=null;
+function openEditSale(id){
+  const s=SALES.find(x=>x.id===id); if(!s) return;
+  esId=id; esPay=s.pay; esStatus=s.status;
+  const payL=PAYS.find(p=>p.id===s.pay)?.label||s.pay;
+  const items=s.items.map(i=>{ const p=PRODS.find(x=>x.id===i.pid); return p?`${p.name.split(' ').slice(0,2).join(' ')} x${i.qty}`:'' }).join(' · ');
+  document.getElementById('es-summary').innerHTML=`<div class="row between mb4"><span class="f12 col-n" style="font-weight:700">#${s.id} ${s.type==='truck'?'🏪 Foodtruck':'📦 Delivery'}</span><span class="f13 col-n" style="font-weight:800">${fmt(s.total)}</span></div><p class="f10 col-g">${items}</p>`;
+  const showPrep=s.type==='delivery';
+  document.getElementById('es-status-row').style.display=showPrep?'flex':'none';
+  esSelStatus(s.status);
+  document.getElementById('es-pay-grid').innerHTML=PAYS.map(p=>`<div class="pay-tile${esPay===p.id?' on':''}" id="es-pt-${p.id}" onclick="esSelPay('${p.id}')"><div class="pay-ico" style="background:${p.bg}">${p.ic}</div><span class="f12 col-n" style="font-weight:700">${p.label}</span></div>`).join('');
+  document.getElementById('edit-sale').classList.add('open');
+}
+function closeEditSale(){ document.getElementById('edit-sale').classList.remove('open'); esId=null; }
+function esSelStatus(st){
+  esStatus=st;
+  const comp=document.getElementById('es-st-comp'), prep=document.getElementById('es-st-prep');
+  if(comp){ comp.style.borderColor=st==='completada'?'var(--o)':'transparent'; comp.style.background=st==='completada'?'#FFF5F3':'var(--w)'; }
+  if(prep){ prep.style.borderColor=st==='en-preparacion'?'var(--o)':'transparent'; prep.style.background=st==='en-preparacion'?'#FFF5F3':'var(--w)'; }
+}
+function esSelPay(id){
+  esPay=id;
+  PAYS.forEach(p=>{ const el=document.getElementById('es-pt-'+p.id); if(el)el.classList.toggle('on',p.id===id); });
+}
+function saveEditSale(){
+  const s=SALES.find(x=>x.id===esId); if(!s)return;
+  s.pay=esPay||s.pay; s.status=esStatus||s.status;
+  closeEditSale(); renderVentasList();
+}
+function deleteSale(){
+  const s=SALES.find(x=>x.id===esId); if(!s)return;
+  if(!confirm(`¿Eliminar la venta #${s.id}? Esta acción no se puede deshacer.`))return;
+  const idx=SALES.findIndex(x=>x.id===esId);
+  if(idx>-1) SALES.splice(idx,1);
+  closeEditSale(); renderVentasList();
 }
 
 // ─── VENTAS LIST ─────────────────────────────────────
@@ -787,7 +899,12 @@ function renderVentasList(){
     const items=s.items.map(i=>{ const p=PRODS.find(x=>x.id===i.pid); return p?`${p.name.split(' ').slice(0,2).join(' ')} ×${i.qty}`:'' }).join(' · ');
     const stHtml=s.status==='completada'?'<span class="bg-tag bg-green">Completada</span>':'<span class="bg-tag bg-amber">En preparación</span>';
     return `<div class="card mb8">
-      <div class="row between mb8"><div><p class="f12 col-n" style="font-weight:700">#${s.id} ${s.type==='truck'?'🏪':'📦'}</p><p class="f10 col-g mt4">${payL} · ${s.ts}hs</p></div>${stHtml}</div>
+      <div class="row between mb8">
+        <div><p class="f12 col-n" style="font-weight:700">#${s.id} ${s.type==='truck'?'🏪':'📦'}</p><p class="f10 col-g mt4">${payL} · ${s.ts}hs</p></div>
+        <div class="row gap8">${stHtml}<button onclick="openEditSale(${s.id})" style="width:30px;height:30px;background:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button></div>
+      </div>
       <div style="height:.5px;background:rgba(0,0,0,.07);margin:0 0 8px"></div>
       <div class="row between"><span class="f10 col-g">${items}</span><span class="f13 col-n" style="font-weight:800">${fmt(s.total)}</span></div>
       ${s.status==='en-preparacion'?`<button onclick="markDone(${s.id})" style="margin-top:10px;width:100%;background:#E8FBF5;color:#065F46;border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">✓ Marcar como completada</button>`:''}
@@ -907,7 +1024,7 @@ let apStep=1, apCat=null, apSv=0, apMv=5, apPhoto=null, apBg=PALETTES[0];
 function openAddProd(){
   apStep=1; apCat=null; apSv=0; apMv=5; apPhoto=null; apBg=PALETTES[0];
   ['ap-nombre','ap-marca','ap-prov'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
-  ['ap-cost','ap-price'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+  ['ap-cost','ap-price'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; el && (el.dataset.raw=''); });
   document.getElementById('margin-val').textContent='—'; document.getElementById('margin-val').style.color='#C4C2BD';
   document.getElementById('margin-badge').style.display='none'; document.getElementById('margin-card').style.background='var(--bg)';
   document.getElementById('ap-s-disp').textContent='0'; document.getElementById('ap-m-disp').textContent='5';
@@ -932,14 +1049,14 @@ function apNext(){
     if(!document.getElementById('ap-nombre').value.trim()||!apCat){ document.getElementById('ap-err1').style.display='block'; return; }
     document.getElementById('ap-err1').style.display='none'; setApStep(2);
   } else if(apStep===2){
-    if(!parseFloat(document.getElementById('ap-cost').value)||!parseFloat(document.getElementById('ap-price').value)){ document.getElementById('ap-err2').style.display='block'; return; }
+    if(!getPriceVal('ap-cost')||!getPriceVal('ap-price')){ document.getElementById('ap-err2').style.display='block'; return; }
     document.getElementById('ap-err2').style.display='none'; setApStep(3);
   } else if(apStep===3){ buildPreview(); setApStep(4); }
 }
 function apValidate(){
   let ok=false;
   if(apStep===1) ok=!!(document.getElementById('ap-nombre')?.value.trim())&&apCat!==null;
-  else if(apStep===2) ok=parseFloat(document.getElementById('ap-cost')?.value)>0&&parseFloat(document.getElementById('ap-price')?.value)>0;
+  else if(apStep===2) ok=getPriceVal('ap-cost')>0&&getPriceVal('ap-price')>0;
   else ok=true;
   const btn=document.getElementById('ap-btn'); if(btn) btn.style.opacity=ok?'1':'0.45';
 }
@@ -982,8 +1099,8 @@ function resetPhoto(){
 }
 
 function calcMargin(){
-  const cost=parseFloat(document.getElementById('ap-cost').value)||0;
-  const price=parseFloat(document.getElementById('ap-price').value)||0;
+  const cost=getPriceVal('ap-cost')||0;
+  const price=getPriceVal('ap-price')||0;
   const mv=document.getElementById('margin-val'), mb=document.getElementById('margin-badge'), mc=document.getElementById('margin-card');
   if(!cost||!price){mv.textContent='—';mv.style.color='#C4C2BD';mb.style.display='none';mc.style.background='var(--bg)';apValidate();return;}
   const m=Math.round(((price-cost)/price)*100);
@@ -1002,8 +1119,8 @@ function apAdj(t,d){ if(t==='s'){apSv=Math.max(0,apSv+d);document.getElementById
 
 function buildPreview(){
   const nombre=document.getElementById('ap-nombre').value.trim();
-  const cost=parseFloat(document.getElementById('ap-cost').value)||0;
-  const price=parseFloat(document.getElementById('ap-price').value)||0;
+  const cost=getPriceVal('ap-cost')||0;
+  const price=getPriceVal('ap-price')||0;
   const marca=document.getElementById('ap-marca').value.trim();
   const prov=document.getElementById('ap-prov').value.trim();
   const m=price>0&&cost>0?Math.round(((price-cost)/price)*100):0;
@@ -1026,8 +1143,8 @@ function buildPreview(){
 
 function confirmAddProd(){
   const nombre=document.getElementById('ap-nombre').value.trim();
-  const cost=parseFloat(document.getElementById('ap-cost').value)||0;
-  const price=parseFloat(document.getElementById('ap-price').value)||0;
+  const cost=getPriceVal('ap-cost')||0;
+  const price=getPriceVal('ap-price')||0;
   const marca=document.getElementById('ap-marca').value.trim();
   const prov=document.getElementById('ap-prov').value.trim();
   PRODS.push({id:PRODS.length+1,name:nombre,cat:apCat,price,cost,stock:apSv,minStock:apMv,bg:apBg,photo:apPhoto||null,marca,prov,costHistory:[{date:today(),v:cost}]});
@@ -1063,6 +1180,25 @@ function renderTops(){
   }).join('');
 }
 function toggleTop(){ topExpanded=!topExpanded; document.getElementById('top-btn').textContent=topExpanded?'Ver top 5':'Ver top 10'; renderTops(); }
+
+// ─── PRICE FORMATTING ────────────────────────────────
+function fmtInput(el){
+  const raw = el.value.replace(/\D/g,'');
+  el.dataset.raw = raw;
+  el.value = raw ? Number(raw).toLocaleString('es-AR',{maximumFractionDigits:0}) : '';
+}
+function getPriceVal(id){
+  const el = document.getElementById(id);
+  if(!el) return 0;
+  const raw = el.dataset.raw || el.value.replace(/\./g,'').replace(/,/g,'');
+  return parseFloat(raw) || 0;
+}
+function setFmtVal(id, num){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.dataset.raw = String(num);
+  el.value = num ? Number(num).toLocaleString('es-AR',{maximumFractionDigits:0}) : '';
+}
 
 // ─── INIT ────────────────────────────────────────────
 refreshAvatar();

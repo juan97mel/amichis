@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>amichis</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#D9D4CC;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:24px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif}
+:root{--o:#FF4B2B;--c:#F01D52;--m:#6DCBB0;--pk:#FFD0DA;--n:#1C2033;--g:#6B7280;--bg:#F5F3EF;--w:#fff}
+#app{max-width:390px;width:100%;background:var(--bg);display:flex;flex-direction:column;height:820px;border-radius:40px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.25),0 12px 28px rgba(0,0,0,.15);position:relative}
+.hdr{background:var(--o);padding:20px 20px 18px;color:#fff;flex-shrink:0}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+#main{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+#main::-webkit-scrollbar{display:none}
+.vp{padding:14px}
+/* Nav */
+#nav{background:var(--w);border-top:.5px solid rgba(0,0,0,.08);display:flex;align-items:center;padding:6px 4px 18px;flex-shrink:0;gap:2px}
+.nb{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0}
+.nb:active{opacity:.7}
+.nl{font-size:10px;font-weight:600;color:#9CA3AF}
+.nl.on{color:var(--o);font-weight:800}
+.fab-wrap{flex:1.7;display:flex;justify-content:center;align-items:flex-end}
+.fab{background:var(--o);color:#fff;border:none;border-radius:24px;padding:12px 18px;display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;font-weight:800;box-shadow:0 6px 20px rgba(255,75,43,.5);margin-top:-20px;transition:transform .15s}
+.fab:active{transform:scale(.94)}
+/* Cards & grids */
+.card{background:var(--w);border-radius:16px;padding:13px 14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+/* Type */
+.lbl{font-size:11px;color:var(--g);margin-bottom:4px}
+.val{font-size:22px;font-weight:800;color:var(--n)}
+.stitle{font-size:14px;font-weight:700;color:var(--n);margin-bottom:10px}
+/* Badges */
+.bg-tag{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700;white-space:nowrap;display:inline-block}
+.bg-green{background:#D1FAE5;color:#065F46}
+.bg-amber{background:#FEF3C7;color:#92400E}
+.bg-gray{background:#F3F4F6;color:#4B5563}
+/* Utils */
+.row{display:flex;align-items:center}
+.col{display:flex;flex-direction:column}
+.between{justify-content:space-between}
+.gap8{gap:8px}
+.gap11{gap:11px}
+.mt4{margin-top:4px}
+.mt8{margin-top:8px}
+.mb4{margin-bottom:4px}
+.mb8{margin-bottom:8px}
+.mb12{margin-bottom:12px}
+.mb16{margin-bottom:16px}
+.f10{font-size:10px}
+.f11{font-size:11px}
+.f12{font-size:12px}
+.f13{font-size:13px}
+.f14{font-size:14px}
+.col-o{color:var(--o)}
+.col-c{color:var(--c)}
+.col-g{color:var(--g)}
+.col-n{color:var(--n)}
+.col-m{color:var(--m)}
+.sep{height:.5px;background:rgba(0,0,0,.07);margin:10px 0}
+/* Buttons */
+.btn-o{background:var(--o);color:#fff;border:none;border-radius:50px;padding:13px 24px;font-size:13px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.btn-o:active{opacity:.85}
+.btn-light{background:var(--bg);color:var(--n);border:none;border-radius:50px;padding:13px 24px;font-size:13px;font-weight:700;cursor:pointer}
+/* Overlays */
+.overlay{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;z-index:20;transform:translateY(100%);transition:transform .38s cubic-bezier(.32,.72,0,1)}
+.overlay.open{transform:translateY(0)}
+.ov-hdr{background:var(--w);padding:14px 16px 12px;display:flex;align-items:center;gap:12px;border-bottom:.5px solid rgba(0,0,0,.06);flex-shrink:0}
+.ov-title{flex:1;text-align:center;font-size:14px;font-weight:800;color:var(--n)}
+.ic-btn{width:34px;height:34px;background:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.ov-body{flex:1;overflow-y:auto;padding:14px;scrollbar-width:none}
+.ov-body::-webkit-scrollbar{display:none}
+.ov-foot{background:var(--w);padding:12px 16px 20px;border-top:.5px solid rgba(0,0,0,.06);flex-shrink:0}
+/* Steps */
+.dots{display:flex;gap:6px;justify-content:center;margin:14px 0 6px}
+.dot{width:8px;height:8px;border-radius:50%;background:#E5E3DF;transition:all .3s}
+.dot.on{background:var(--o);width:24px;border-radius:4px}
+.dot.done{background:var(--m)}
+/* Cart bar */
+.cart-bar{background:var(--n);border-radius:20px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between}
+.cart-next{background:var(--o);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px}
+/* Pay tiles */
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0 14px}
+.pay-tile{background:var(--w);border:2px solid transparent;border-radius:14px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:border-color .15s}
+.pay-tile.on{border-color:var(--o);background:#FFF5F3}
+.pay-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+/* Products */
+.prod-row{background:var(--w);border-radius:14px;padding:12px 13px;display:flex;align-items:center;gap:11px;margin-bottom:8px}
+.pdot{width:40px;height:40px;border-radius:10px;flex-shrink:0;background-size:cover;background-position:center}
+/* Qty btns */
+.qb{border:none;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;transition:transform .1s;flex-shrink:0}
+.qb:active{transform:scale(.85)}
+/* Form */
+.f-grp{margin-bottom:14px}
+.f-lbl{font-size:11px;font-weight:700;color:var(--g);margin-bottom:7px;letter-spacing:.4px;text-transform:uppercase;display:block}
+.f-inp{width:100%;background:var(--w);border:2px solid transparent;border-radius:14px;padding:14px 16px;font-size:15px;font-weight:600;color:var(--n);font-family:inherit;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.f-inp:focus{border-color:var(--o)}
+.f-inp::placeholder{color:#C4C2BD;font-weight:500}
+.price-wrap{background:var(--w);border:2px solid transparent;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:4px;transition:border-color .2s}
+.price-wrap:focus-within{border-color:var(--o)}
+.price-sym{font-size:17px;font-weight:700;color:#C4C2BD}
+.price-in{background:none;border:none;outline:none;font-size:15px;font-weight:700;color:var(--n);font-family:inherit;width:100%;-webkit-appearance:none}
+/* Cat chips */
+.cchips{display:flex;gap:7px;flex-wrap:wrap}
+.cchip{background:var(--w);color:var(--n);padding:8px 14px;border-radius:50px;font-size:12px;font-weight:600;border:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .15s}
+.cchip.on{background:var(--o);color:#fff;border-color:var(--o)}
+.cchip.new{border-color:rgba(0,0,0,.15);color:var(--g)}
+/* Photo area */
+.photo-area{width:100%;height:110px;background:var(--w);border-radius:16px;border:2px dashed #D9D6D0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer;margin-bottom:14px;overflow:hidden;background-size:cover;background-position:center}
+/* Margin card */
+.margin-card{border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;transition:background .3s}
+/* Settings — slides from right */
+#settings{position:absolute;inset:0;background:var(--bg);z-index:30;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .32s cubic-bezier(.32,.72,0,1)}
+#settings.open{transform:translateX(0)}
+/* Stock sheet */
+#ssheet{position:absolute;bottom:0;left:0;right:0;background:var(--w);border-radius:26px 26px 0 0;z-index:25;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);padding:20px 20px 28px;max-height:85%;overflow-y:auto}
+#ssheet.open{transform:translateY(0)}
+#dimmer{position:absolute;inset:0;background:rgba(0,0,0,0);z-index:18;pointer-events:none;transition:background .3s}
+#dimmer.on{background:rgba(0,0,0,.45);pointer-events:all}
+/* Type tiles */
+.type-tile{background:var(--w);border:2px solid transparent;border-radius:16px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;text-align:center;transition:all .15s;flex:1}
+.type-tile.on{border-color:var(--o);background:#FFF5F3}
+/* Period bar */
+.period-bar{background:var(--w);border-radius:50px;padding:4px;display:flex;gap:2px;margin-bottom:12px}
+.pb{flex:1;background:transparent;color:var(--n);border:none;padding:7px 2px;border-radius:50px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.pb.on{background:var(--o);color:#fff;font-weight:800}
+/* Date inputs */
+.date-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
+.d-inp{background:var(--w);border:2px solid transparent;border-radius:12px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--n);font-family:inherit;outline:none;width:100%;transition:border-color .2s}
+.d-inp:focus{border-color:var(--o)}
+/* Avatar */
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;cursor:pointer;flex-shrink:0}
+/* History item */
+.hist-row{background:#F9F8F6;border-radius:10px;padding:9px 12px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+/* Dashboard hero */
+.hero-card{background:var(--o);border-radius:20px;padding:18px;margin-bottom:12px;color:#fff}
+.mini-bar{display:flex;align-items:flex-end;gap:4px;height:44px}
+/* Top row */
+.top-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+/* Success */
+.s-circ{width:72px;height:72px;background:#E8FBF5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+/* Big qty btns */
+.qbig{width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;transition:transform .1s}
+.qbig:active{transform:scale(.88)}
+/* Notice box */
+.notice{background:#FFF7ED;border-radius:12px;padding:10px 13px;margin-bottom:12px;font-size:11px;color:#92400E;font-weight:600;display:flex;gap:7px;align-items:flex-start}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-top">
+      <div class="row gap8">
+        <div style="width:32px;height:32px;background:rgba(255,255,255,.95);border-radius:50%;display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="13" viewBox="0 0 18 13"><rect x="0" y="0" width="4.5" height="13" rx="2.25" fill="#FF4B2B"/><rect x="3.5" y="3" width="4.5" height="10" rx="2.25" fill="#FF4B2B"/><rect x="10" y="3" width="4.5" height="10" rx="2.25" fill="#FF4B2B"/><rect x="13.5" y="0" width="4.5" height="13" rx="2.25" fill="#FF4B2B"/></svg>
+        </div>
+        <span style="font-size:18px;font-weight:800;letter-spacing:-.5px">amichis</span>
+      </div>
+      <div id="hdr-av" class="av" onclick="openSettings()" style="width:38px;height:38px;font-size:15px;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.35)">L</div>
+    </div>
+    <p id="hdr-sub" style="font-size:11px;opacity:.75;margin-bottom:2px"></p>
+    <p id="hdr-title" style="font-size:21px;font-weight:800;margin-bottom:18px;letter-spacing:-.3px"></p>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div id="view-dashboard" class="vp" style="display:none">
+      <div class="hero-card mb12">
+        <p id="dash-date" class="f10 mb12" style="opacity:.7"></p>
+        <div class="row between mb12">
+          <div>
+            <p style="font-size:11px;opacity:.75;margin-bottom:4px">Ventas hoy</p>
+            <p style="font-size:28px;font-weight:800;letter-spacing:-.5px;line-height:1">$8.200</p>
+            <div style="margin-top:8px;background:rgba(255,255,255,.2);display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>
+              <span style="font-size:11px;font-weight:700">+12% vs ayer</span>
+            </div>
+          </div>
+          <div class="mini-bar" id="dash-chart"></div>
+        </div>
+        <div class="g3">
+          <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:10px">
+            <p style="font-size:9px;opacity:.7;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">Ticket</p>
+            <p style="font-size:16px;font-weight:800">$1.640</p>
+          </div>
+          <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:10px">
+            <p style="font-size:9px;opacity:.7;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">Margen</p>
+            <p style="font-size:16px;font-weight:800">42%</p>
+          </div>
+          <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:10px">
+            <p style="font-size:9px;opacity:.7;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">Ventas</p>
+            <p style="font-size:16px;font-weight:800">15</p>
+          </div>
+        </div>
+      </div>
+      <div id="dash-alert" class="mb12" style="display:none"></div>
+      <div class="row between mb8"><p class="stitle" style="margin:0">Últimas ventas</p><span class="f12 col-o" style="font-weight:700;cursor:pointer" onclick="showView('ventas')">Ver todas →</span></div>
+      <div id="dash-sales" class="mb12"></div>
+      <p class="stitle">Más vendidos hoy</p>
+      <div id="dash-tops"></div>
+    </div>
+
+    <!-- ── STOCK ── -->
+    <div id="view-stock" style="display:none">
+      <div style="background:var(--bg);padding:14px 14px 0;position:sticky;top:0;z-index:5">
+        <div class="row gap8 mb8">
+          <div style="flex:1;background:var(--w);border-radius:50px;padding:9px 14px;display:flex;align-items:center;gap:8px;border:.5px solid rgba(0,0,0,.1)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="st-search" type="text" placeholder="Buscar producto..." oninput="renderStock()" style="background:none;border:none;outline:none;font-size:12px;color:var(--n);font-family:inherit;width:100%"/>
+          </div>
+          <button onclick="openAddProd()" style="width:38px;height:38px;background:var(--o);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(255,75,43,.45);flex-shrink:0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <div id="st-cats" style="display:flex;gap:7px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none"></div>
+        <div class="g3 mb12">
+          <div style="background:var(--w);border-radius:12px;padding:10px;text-align:center"><p id="st-total" style="font-size:20px;font-weight:800;color:var(--n)">0</p><p class="f10 col-g">Productos</p></div>
+          <div style="background:#FFF0F2;border-radius:12px;padding:10px;text-align:center"><p id="st-low" style="font-size:20px;font-weight:800;color:var(--c)">0</p><p class="f10 col-c" style="font-weight:600">Stock bajo</p></div>
+          <div style="background:#F0FDF9;border-radius:12px;padding:10px;text-align:center"><p id="st-out" style="font-size:20px;font-weight:800;color:#059669">0</p><p style="font-size:10px;color:#059669;font-weight:600">Agotados</p></div>
+        </div>
+      </div>
+      <div id="st-list" style="padding:0 14px 14px"></div>
+      <div style="padding:0 14px 16px;text-align:center">
+        <button class="btn-o" onclick="openAddProd()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar producto
+        </button>
+      </div>
+    </div>
+
+    <!-- ── VENTAS LIST ── -->
+    <div id="view-ventas" class="vp" style="display:none">
+      <div class="g2 mb12">
+        <div class="card"><p class="lbl">Ventas hoy</p><p class="val">15</p></div>
+        <div class="card"><p class="lbl">Total hoy</p><p class="val">$8.200</p></div>
+      </div>
+      <p class="stitle">Ventas de hoy</p>
+      <div id="ventas-list"></div>
+    </div>
+
+    <!-- ── REPORTES ── -->
+    <div id="view-reportes" class="vp" style="display:none">
+      <div class="period-bar">
+        <button class="pb on" id="pb-hoy" onclick="selPer('hoy')">Hoy</button>
+        <button class="pb" id="pb-sem" onclick="selPer('sem')">Semana</button>
+        <button class="pb" id="pb-mes" onclick="selPer('mes')">Mes</button>
+        <button class="pb" id="pb-ano" onclick="selPer('ano')">Año</button>
+        <button class="pb" id="pb-custom" onclick="selPer('custom')" title="Personalizado">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </button>
+      </div>
+      <div id="custom-range" class="date-row" style="display:none">
+        <div><p class="lbl mb4">Desde</p><input type="date" class="d-inp" id="date-from"/></div>
+        <div><p class="lbl mb4">Hasta</p><input type="date" class="d-inp" id="date-to"/></div>
+      </div>
+      <div class="g2 mb12">
+        <div class="card"><p class="lbl">Total ventas</p><p id="r-total" class="val">$8.200</p></div>
+        <div class="card"><p class="lbl">Margen</p><p id="r-margen" class="val col-m">43%</p></div>
+        <div class="card"><p class="lbl">Ticket prom.</p><p id="r-ticket" class="val">$1.640</p></div>
+        <div class="card"><p class="lbl">Cant. ventas</p><p id="r-cant" class="val">15</p></div>
+      </div>
+      <div class="card mb12">
+        <p class="f12 col-n mb8" style="font-weight:700">Ventas por período</p>
+        <div id="r-chart" style="display:flex;align-items:flex-end;gap:5px;height:72px"></div>
+      </div>
+      <div class="card mb12">
+        <div class="row between mb12">
+          <p class="f12 col-n" style="font-weight:700">Top productos</p>
+          <button id="top-btn" onclick="toggleTop()" style="background:var(--bg);border:none;border-radius:50px;padding:4px 12px;font-size:11px;font-weight:700;color:var(--o);cursor:pointer">Ver top 10</button>
+        </div>
+        <div id="top-qty"></div>
+      </div>
+      <div class="card mb12">
+        <p class="f12 col-n mb12" style="font-weight:700">Top por margen</p>
+        <div id="top-margin"></div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- NAV -->
+  <nav id="nav">
+    <button class="nb" onclick="showView('dashboard')"><svg id="ni-d" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span id="nl-d" class="nl">Inicio</span></button>
+    <button class="nb" onclick="showView('stock')"><svg id="ni-s" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg><span id="nl-s" class="nl">Stock</span></button>
+    <div class="fab-wrap"><button class="fab" onclick="openVenta()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Venta</button></div>
+    <button class="nb" onclick="showView('ventas')"><svg id="ni-v" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span id="nl-v" class="nl">Ventas</span></button>
+    <button class="nb" onclick="showView('reportes')"><svg id="ni-r" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span id="nl-r" class="nl">Reportes</span></button>
+  </nav>
+
+  <!-- ── SETTINGS ── -->
+  <div id="settings">
+    <div class="ov-hdr">
+      <button class="ic-btn" onclick="closeSettings()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2033" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <p class="ov-title">Configuración</p>
+      <div style="width:34px"></div>
+    </div>
+    <div class="ov-body">
+      <div class="card mb12" style="text-align:center;padding:24px 16px">
+        <div id="sett-av" class="av" style="width:72px;height:72px;font-size:26px;margin:0 auto 10px;background:var(--o)" onclick="cycleAvColor()"></div>
+        <p class="f11 col-g mb16">Toca el avatar para cambiar color</p>
+        <div class="f-grp mb8">
+          <label class="f-lbl">Tu nombre</label>
+          <input class="f-inp" id="sett-name" type="text" placeholder="Ej: Laura..." oninput="saveProfile()"/>
+        </div>
+        <div class="f-grp" style="margin-bottom:0">
+          <label class="f-lbl">Nombre del negocio</label>
+          <input class="f-inp" id="sett-biz" type="text" placeholder="Ej: Amichis..." oninput="saveProfile()"/>
+        </div>
+      </div>
+      <div class="card mb12">
+        <div class="row between" style="padding:4px 0"><span class="f13 col-n" style="font-weight:700">Productos registrados</span><span id="sett-pc" class="f13 col-g">0</span></div>
+        <div class="sep"></div>
+        <div class="row between" style="padding:4px 0"><span class="f13 col-n" style="font-weight:700">Ventas registradas</span><span id="sett-sc" class="f13 col-g">0</span></div>
+        <div class="sep"></div>
+        <div class="row between" style="padding:4px 0"><span class="f13 col-n" style="font-weight:700">Versión</span><span class="f13 col-g">1.0.0 beta</span></div>
+      </div>
+      <button onclick="logOut()" style="width:100%;background:#FFF0F2;color:var(--c);border:none;border-radius:16px;padding:15px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--c)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+
+  <!-- ── NUEVA VENTA ── -->
+  <div id="venta" class="overlay">
+    <div class="ov-hdr">
+      <button id="v-back" class="ic-btn" onclick="vBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2033" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <p id="v-title" class="ov-title">Tipo de venta</p>
+      <button class="ic-btn" onclick="closeVenta()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="dots"><div class="dot on" id="vd1"></div><div class="dot" id="vd2"></div><div class="dot" id="vd3"></div><div class="dot" id="vd4"></div></div>
+
+    <!-- S0: tipo -->
+    <div id="vs0" class="ov-body">
+      <p class="f11 col-g mb8" style="font-weight:700;text-transform:uppercase;letter-spacing:.5px">¿Qué tipo de venta es?</p>
+      <div class="row gap8">
+        <div class="type-tile on" id="tt-truck" onclick="selType('truck')">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF4B2B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h5l2 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <p class="f13 col-n" style="font-weight:800">Foodtruck</p>
+          <small class="f10 col-g">Venta presencial</small>
+        </div>
+        <div class="type-tile" id="tt-del" onclick="selType('delivery')">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          <p class="f13 col-n" style="font-weight:800">Delivery</p>
+          <small class="f10 col-g">Envío a domicilio</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- S1: productos -->
+    <div id="vs1" class="ov-body" style="display:none">
+      <div style="background:var(--w);border-radius:50px;padding:9px 14px;display:flex;align-items:center;gap:8px;border:.5px solid rgba(0,0,0,.1)" class="mb12">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span class="f12 col-g">Buscar producto...</span>
+      </div>
+      <div id="v-prods"></div>
+    </div>
+
+    <!-- S2: pago -->
+    <div id="vs2" class="ov-body" style="display:none">
+      <p class="f11 col-g mb8" style="font-weight:700;text-transform:uppercase;letter-spacing:.5px">Resumen</p>
+      <div id="v-summary" class="card mb12"></div>
+      <p class="f11 col-g mb8" style="font-weight:700;text-transform:uppercase;letter-spacing:.5px">Descuento (opcional)</p>
+      <div style="background:var(--bg);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+        <input type="number" id="disc" placeholder="0" min="0" max="100" style="background:none;border:none;outline:none;font-size:14px;font-weight:700;color:var(--n);width:60px;font-family:inherit" oninput="onDiscChange()"/>
+        <span class="f12 col-g">% descuento</span>
+      </div>
+      <p class="f11 col-g mb4" style="font-weight:700;text-transform:uppercase;letter-spacing:.5px">Método de pago</p>
+      <div class="pay-grid" id="pay-grid"></div>
+    </div>
+
+    <!-- S3: confirmada -->
+    <div id="vs3" class="ov-body" style="display:none;text-align:center;padding-top:24px">
+      <div class="s-circ"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6DCBB0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <p style="font-size:20px;font-weight:800;color:var(--n);margin-bottom:4px">Venta registrada</p>
+      <p id="conf-num" class="f13 col-g mb16">#1043</p>
+      <div style="background:var(--bg);border-radius:16px;padding:16px;text-align:left;margin-bottom:20px">
+        <div id="conf-items" class="mb8"></div>
+        <div class="sep"></div>
+        <div class="row between mt8"><span class="f12 col-g">Descuento</span><span id="conf-disc" class="f12 col-o" style="font-weight:700">—</span></div>
+        <div class="row between mt8"><span class="f13 col-n" style="font-weight:700">Total</span><span id="conf-total" style="font-size:15px;font-weight:800;color:var(--n)">$0</span></div>
+        <div class="row between mt8"><span class="f12 col-g">Pago</span><span id="conf-pay" class="f12 col-n" style="font-weight:700">—</span></div>
+        <div class="row between mt8"><span class="f12 col-g">Tipo</span><span id="conf-type" class="f12 col-n" style="font-weight:700">—</span></div>
+        <div class="row between mt8"><span class="f12 col-g">Estado</span><span id="conf-status" class="bg-tag bg-green">Completada</span></div>
+      </div>
+      <button class="btn-o" style="width:100%;justify-content:center" onclick="closeVenta();showView('dashboard')">Confirmar venta</button>
+    </div>
+
+    <!-- footer venta -->
+    <div id="v-foot" class="ov-foot">
+      <div id="v-s0-btn" style="display:none">
+        <button onclick="vS0Next()" style="width:100%;background:var(--o);color:#fff;border:none;border-radius:50px;padding:15px;font-size:14px;font-weight:800;cursor:pointer">Siguiente</button>
+      </div>
+      <div id="v-cart-bar" class="cart-bar" style="display:none" onclick="vNext()">
+        <div><p id="cart-count" style="font-size:11px;color:rgba(255,255,255,.6)">0 productos</p><p id="cart-amt" style="font-size:18px;font-weight:800;color:#fff">$0</p></div>
+        <button class="cart-next" id="cart-btn"><span id="cart-lbl">Siguiente</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AGREGAR PRODUCTO ── -->
+  <div id="add-prod" class="overlay" style="z-index:22">
+    <div class="ov-hdr">
+      <button id="ap-back" class="ic-btn" onclick="apBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2033" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <p id="ap-title" class="ov-title">Nuevo producto</p>
+      <button class="ic-btn" onclick="closeAddProd()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="dots"><div class="dot on" id="apd1"></div><div class="dot" id="apd2"></div><div class="dot" id="apd3"></div><div class="dot" id="apd4"></div></div>
+
+    <!-- AP1 -->
+    <div id="aps1" class="ov-body">
+      <div class="photo-area" id="photo-area" onclick="triggerPhoto()">
+        <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="handlePhoto(event)"/>
+        <div id="photo-ph" style="display:flex;flex-direction:column;align-items:center;gap:7px">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C4C2BD" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span class="f12" style="color:#C4C2BD;font-weight:600">Agregar foto del producto</span>
+        </div>
+        <div id="photo-change" style="display:none;position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">Cambiar</div>
+      </div>
+      <!-- Color pickers para cuando no hay foto -->
+      <div class="row gap8 mb12" id="palette-row" style="justify-content:center">
+        <span class="f11 col-g" style="margin-right:4px">Color:</span>
+      </div>
+      <div class="f-grp">
+        <label class="f-lbl">Nombre *</label>
+        <input class="f-inp" id="ap-nombre" type="text" placeholder="Ej: Snacks Premium Mix 250g" oninput="apValidate()"/>
+      </div>
+      <div class="f-grp">
+        <label class="f-lbl">Categoría *</label>
+        <div class="cchips" id="ap-cats"></div>
+        <div id="new-cat-row" style="display:none;margin-top:8px;display:flex;gap:8px;align-items:center">
+          <input class="f-inp" id="new-cat-in" type="text" placeholder="Nueva categoría..." style="padding:10px 14px;font-size:13px;flex:1"/>
+          <button onclick="addCat()" style="background:var(--o);color:#fff;border:none;border-radius:50px;padding:9px 16px;font-size:12px;font-weight:800;cursor:pointer">OK</button>
+        </div>
+      </div>
+      <div class="f-grp">
+        <label class="f-lbl">Marca <span style="text-transform:none;font-weight:400;letter-spacing:0">(opcional)</span></label>
+        <input class="f-inp" id="ap-marca" type="text" placeholder="Ej: Royal Canin, Kong..."/>
+      </div>
+      <p id="ap-err1" class="f12 col-c" style="font-weight:600;display:none;margin-top:-8px;margin-bottom:8px">Completá el nombre y elegí una categoría</p>
+    </div>
+
+    <!-- AP2 -->
+    <div id="aps2" class="ov-body" style="display:none">
+      <div class="f-grp">
+        <label class="f-lbl">Precio de compra *</label>
+        <div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ap-cost" type="number" placeholder="0" oninput="calcMargin()"/></div>
+      </div>
+      <div class="f-grp">
+        <label class="f-lbl">Precio de venta *</label>
+        <div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ap-price" type="number" placeholder="0" oninput="calcMargin()"/></div>
+      </div>
+      <div id="margin-card" class="margin-card" style="background:var(--bg)">
+        <div><p class="f11 col-g mb4" style="font-weight:700">Margen calculado</p><p id="margin-val" style="font-size:22px;font-weight:800;color:#C4C2BD">—</p></div>
+        <div id="margin-badge" style="display:none;border-radius:12px;padding:8px 14px;text-align:center"><p id="margin-tag" class="f11" style="font-weight:700;margin-bottom:1px"></p><p id="margin-sub" class="f10" style="opacity:.8"></p></div>
+      </div>
+      <p id="ap-err2" class="f12 col-c" style="font-weight:600;display:none">Ingresá ambos precios</p>
+    </div>
+
+    <!-- AP3 -->
+    <div id="aps3" class="ov-body" style="display:none">
+      <div class="f-grp">
+        <label class="f-lbl">Stock inicial</label>
+        <div style="display:flex;align-items:center;justify-content:center;gap:16px;background:var(--w);border-radius:16px;padding:20px">
+          <button class="qbig" style="background:#F5F3EF;color:var(--n)" onclick="apAdj('s',-1)">−</button>
+          <span id="ap-s-disp" style="font-size:32px;font-weight:800;color:var(--n);min-width:48px;text-align:center">0</span>
+          <button class="qbig" style="background:var(--o);color:#fff" onclick="apAdj('s',1)">+</button>
+        </div>
+        <p class="f11 col-g" style="text-align:center;margin-top:8px">unidades disponibles</p>
+      </div>
+      <div class="f-grp">
+        <label class="f-lbl">Stock mínimo (alerta)</label>
+        <div style="display:flex;align-items:center;justify-content:center;gap:16px;background:var(--w);border-radius:16px;padding:16px">
+          <button class="qbig" style="background:#FFF0F2;color:var(--c)" onclick="apAdj('m',-1)">−</button>
+          <span id="ap-m-disp" style="font-size:32px;font-weight:800;color:var(--c);min-width:48px;text-align:center">5</span>
+          <button class="qbig" style="background:#FFF0F2;color:var(--c)" onclick="apAdj('m',1)">+</button>
+        </div>
+        <p class="f11 col-g" style="text-align:center;margin-top:8px">Te alertamos al bajar de este número</p>
+      </div>
+      <div class="f-grp">
+        <label class="f-lbl">Proveedor <span style="text-transform:none;font-weight:400;letter-spacing:0">(opcional)</span></label>
+        <input class="f-inp" id="ap-prov" type="text" placeholder="Ej: Distribuidora López..."/>
+      </div>
+    </div>
+
+    <!-- AP4 preview -->
+    <div id="aps4" class="ov-body" style="display:none;text-align:center;padding-top:20px">
+      <div class="s-circ"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6DCBB0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <p style="font-size:18px;font-weight:800;color:var(--n);margin-bottom:4px">Todo en orden</p>
+      <p class="f12 col-g mb16">Así aparecerá en tu stock</p>
+      <div style="background:var(--w);border-radius:16px;padding:16px;display:flex;align-items:center;gap:13px;text-align:left;margin-bottom:12px">
+        <div id="prev-dot" style="width:52px;height:52px;border-radius:13px;flex-shrink:0;background-size:cover;background-position:center"></div>
+        <div style="flex:1">
+          <p id="prev-name" class="f13 col-n" style="font-weight:800"></p>
+          <p id="prev-cat" class="f11 col-g mt4"></p>
+          <div class="row gap8 mt4"><span id="prev-price" class="f13 col-o" style="font-weight:800"></span><span id="prev-mb" style="font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700"></span></div>
+        </div>
+        <div style="text-align:right;flex-shrink:0"><p id="prev-stock" style="font-size:18px;font-weight:800;color:var(--n)"></p><p class="f10 col-g">unidades</p></div>
+      </div>
+      <div class="card mb16" style="text-align:left">
+        <div class="row between mb8"><span class="f11 col-g">Precio compra</span><span id="prev-cost" class="f12 col-n" style="font-weight:700"></span></div>
+        <div class="row between mb8"><span class="f11 col-g">Precio venta</span><span id="prev-pv" class="f12 col-o" style="font-weight:700"></span></div>
+        <div class="row between mb8"><span class="f11 col-g">Stock mínimo</span><span id="prev-min" class="f12 col-c" style="font-weight:700"></span></div>
+        <div class="row between" id="prev-prow" style="display:none"><span class="f11 col-g">Proveedor</span><span id="prev-prov" class="f12 col-n" style="font-weight:700"></span></div>
+      </div>
+      <div class="col gap8">
+        <button class="btn-o" style="width:100%;justify-content:center" onclick="confirmAddProd()">Agregar al stock</button>
+        <button class="btn-light" style="width:100%" onclick="closeAddProd()">Cancelar</button>
+      </div>
+    </div>
+
+    <div id="ap-foot" class="ov-foot">
+      <button id="ap-btn" onclick="apNext()" style="width:100%;background:var(--o);color:#fff;border:none;border-radius:50px;padding:15px;font-size:14px;font-weight:800;cursor:pointer;opacity:.45;transition:opacity .2s">Siguiente</button>
+    </div>
+  </div>
+
+  <!-- STOCK SHEET -->
+  <div id="dimmer" onclick="closeSS()"></div>
+  <div id="ssheet">
+    <div style="width:36px;height:4px;background:#E5E3DF;border-radius:2px;margin:0 auto 20px"></div>
+    <div class="row gap11 mb12">
+      <div id="ss-dot" style="width:52px;height:52px;border-radius:14px;flex-shrink:0;background-size:cover;background-position:center"></div>
+      <div style="flex:1"><p id="ss-name" class="f14 col-n" style="font-weight:800"></p><p id="ss-cat" class="f11 col-g mt4"></p></div>
+    </div>
+    <div class="sep mb12"></div>
+    <div class="g2 mb8">
+      <div><p class="f-lbl">Precio compra</p><div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ss-cost" type="number" oninput="ssNotice()"/></div></div>
+      <div><p class="f-lbl">Precio venta</p><div class="price-wrap"><span class="price-sym">$</span><input class="price-in" id="ss-price" type="number"/></div></div>
+    </div>
+    <div id="ss-notice" class="notice mb12" style="display:none">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#92400E" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Al cambiar el costo se guarda el historial. Los reportes anteriores conservan los valores originales.</span>
+    </div>
+    <div id="ss-hist" style="display:none;margin-bottom:12px">
+      <p class="f11 col-g mb8" style="font-weight:700;text-transform:uppercase;letter-spacing:.4px">Historial de costos</p>
+      <div id="ss-hist-list"></div>
+    </div>
+    <p class="lbl mb8">Ajustar stock</p>
+    <div class="row gap8 mb16" style="justify-content:center">
+      <button onclick="ssAdj(-5)" style="background:var(--bg);color:var(--n);border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer">−5</button>
+      <button onclick="ssAdj(-1)" style="background:var(--bg);color:var(--n);border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer">−1</button>
+      <div style="background:var(--bg);border-radius:12px;padding:10px 20px;text-align:center"><p id="ss-stock" style="font-size:24px;font-weight:800;color:var(--n)">0</p><p class="f10 col-g">unidades</p></div>
+      <button onclick="ssAdj(1)" style="background:var(--o);color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer">+1</button>
+      <button onclick="ssAdj(5)" style="background:var(--o);color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer">+5</button>
+    </div>
+    <button class="btn-o" style="width:100%;justify-content:center" onclick="saveSS()">Guardar</button>
+  </div>
+
+</div><!-- /app -->
+<script>
+// ─── DATA ────────────────────────────────────────────
+const fmt = n => '$' + Number(n).toLocaleString('es-AR');
+const today = () => new Date().toISOString().split('T')[0];
+
+let CATS = ['Snacks','Juguetes','Higiene','Accesorios','Ropa'];
+
+let PRODS = [
+  {id:1,name:'Snacks Premium Mix',      cat:'Snacks',     price:850, cost:500,  stock:3,  minStock:5,  bg:'#FFD0DA', photo:null, costHistory:[{date:'2025-01-10',v:450},{date:'2025-03-01',v:500}]},
+  {id:2,name:'Shampoo Naturale 500ml',  cat:'Higiene',    price:1800,cost:900,  stock:7,  minStock:5,  bg:'#E0F7F1', photo:null, costHistory:[{date:'2025-01-10',v:900}]},
+  {id:3,name:'Kong Classic M',          cat:'Juguetes',   price:4500,cost:2200, stock:18, minStock:3,  bg:'#EDE9FE', photo:null, costHistory:[{date:'2025-01-10',v:2200}]},
+  {id:4,name:'Collar Reflectivo',       cat:'Accesorios', price:2200,cost:1100, stock:12, minStock:4,  bg:'#DBEAFE', photo:null, costHistory:[{date:'2025-01-10',v:1100}]},
+  {id:5,name:'Collar Antipulgas M',     cat:'Accesorios', price:3100,cost:1600, stock:5,  minStock:6,  bg:'#FEF3C7', photo:null, costHistory:[{date:'2025-01-10',v:1600}]},
+  {id:6,name:'Cuerda Juguete Grande',   cat:'Juguetes',   price:1200,cost:600,  stock:15, minStock:4,  bg:'#DCFCE7', photo:null, costHistory:[{date:'2025-01-10',v:600}]},
+  {id:7,name:'Pipeta Antiparasitaria',  cat:'Higiene',    price:2400,cost:1200, stock:20, minStock:5,  bg:'#FFF7ED', photo:null, costHistory:[{date:'2025-01-10',v:1200}]},
+  {id:8,name:'Cama Ortopédica M',       cat:'Accesorios', price:8500,cost:4000, stock:4,  minStock:2,  bg:'#EEF2FF', photo:null, costHistory:[{date:'2025-01-10',v:4000}]},
+];
+
+let SALES = [
+  {id:1042,items:[{pid:1,qty:2},{pid:5,qty:1}],total:3200,pay:'mercadopago',type:'truck',status:'completada',ts:'14:23'},
+  {id:1041,items:[{pid:2,qty:1}],total:1800,pay:'efectivo',type:'delivery',status:'en-preparacion',ts:'13:47'},
+  {id:1040,items:[{pid:3,qty:1},{pid:1,qty:1}],total:5350,pay:'transferencia',type:'truck',status:'completada',ts:'12:10'},
+  {id:1039,items:[{pid:4,qty:1}],total:2200,pay:'tarjeta',type:'truck',status:'completada',ts:'11:35'},
+];
+
+const PAYS = [
+  {id:'efectivo',     label:'Efectivo',     bg:'#DCFCE7', ic:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>'},
+  {id:'transferencia',label:'Transferencia',bg:'#DBEAFE', ic:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>'},
+  {id:'tarjeta',      label:'Tarjeta',      bg:'#EDE9FE', ic:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/><line x1="5" y1="15" x2="9" y2="15"/></svg>'},
+  {id:'mercadopago',  label:'Mercado Pago', bg:'#FEF3C7', ic:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400E" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'},
+  {id:'mixto',        label:'Mixto',        bg:'#FFD0DA', ic:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>'},
+];
+
+const PERIODS = {
+  hoy:{total:'$8.200',margen:'43%',ticket:'$1.640',cant:'15',chart:[{l:'9am',v:800},{l:'10am',v:1200},{l:'11am',v:600},{l:'12pm',v:2100},{l:'1pm',v:900},{l:'2pm',v:1800},{l:'3pm',v:800},{l:'4pm',v:200}]},
+  sem:{total:'$15.800',margen:'41%',ticket:'$2.257',cant:'7',chart:[{l:'L',v:1200},{l:'M',v:800},{l:'X',v:2100},{l:'J',v:1600},{l:'V',v:3200},{l:'S',v:4100},{l:'D',v:2800}]},
+  mes:{total:'$24.500',margen:'42%',ticket:'$1.640',cant:'149',chart:[{l:'S1',v:5800},{l:'S2',v:7200},{l:'S3',v:6400},{l:'S4',v:8200}]},
+  ano:{total:'$83.000',margen:'40%',ticket:'$1.384',cant:'60',chart:[{l:'E',v:18000},{l:'F',v:21000},{l:'M',v:19500},{l:'A',v:24500},{l:'M',v:0},{l:'J',v:0},{l:'J',v:0},{l:'A',v:0},{l:'S',v:0},{l:'O',v:0},{l:'N',v:0},{l:'D',v:0}]},
+};
+
+const PALETTES = ['#FFD0DA','#E0F7F1','#EDE9FE','#DBEAFE','#FEF3C7','#DCFCE7','#FFF7ED','#EEF2FF'];
+const AV_COLORS = ['#FF4B2B','#F01D52','#6DCBB0','#1C2033','#7C3AED','#1E40AF','#059669','#92400E'];
+const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+// ─── PROFILE ─────────────────────────────────────────
+let profile = {name:'Laura', biz:'Amichis', color:'#FF4B2B'};
+let avColorIdx = 0;
+
+function saveProfile(){
+  profile.name = document.getElementById('sett-name').value || profile.name;
+  profile.biz  = document.getElementById('sett-biz').value  || profile.biz;
+  refreshAvatar();
+}
+function refreshAvatar(){
+  const init = (profile.name||'?')[0].toUpperCase();
+  ['hdr-av','sett-av'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.textContent=init;
+    el.style.background=profile.color;
+  });
+}
+function cycleAvColor(){
+  avColorIdx = (avColorIdx+1) % AV_COLORS.length;
+  profile.color = AV_COLORS[avColorIdx];
+  refreshAvatar();
+}
+
+// ─── SETTINGS ────────────────────────────────────────
+function openSettings(){
+  document.getElementById('sett-name').value = profile.name;
+  document.getElementById('sett-biz').value  = profile.biz;
+  document.getElementById('sett-pc').textContent = PRODS.length;
+  document.getElementById('sett-sc').textContent = SALES.length;
+  document.getElementById('sett-av').textContent = profile.name[0].toUpperCase();
+  document.getElementById('sett-av').style.background = profile.color;
+  document.getElementById('settings').classList.add('open');
+}
+function closeSettings(){ document.getElementById('settings').classList.remove('open'); }
+function logOut(){ closeSettings(); alert('Sesión cerrada.\n(En producción redirige al login)'); }
+
+// ─── NAV ─────────────────────────────────────────────
+const VIEWS = ['dashboard','stock','ventas','reportes'];
+const NAV_K = {dashboard:'d',stock:'s',ventas:'v',reportes:'r'};
+const TITLES = {
+  dashboard:['','Tu negocio hoy'],
+  stock:['','Gestión de stock'],
+  ventas:['','Ventas'],
+  reportes:['','Reportes'],
+};
+
+function showView(v){
+  VIEWS.forEach(n=>{ const el=document.getElementById('view-'+n); if(el) el.style.display=n===v?'block':'none'; });
+  VIEWS.forEach(n=>{
+    const k=NAV_K[n], on=n===v, c=on?'#FF4B2B':'#9CA3AF';
+    const lbl=document.getElementById('nl-'+k), ico=document.getElementById('ni-'+k);
+    if(lbl){lbl.style.color=c; lbl.classList.toggle('on',on);}
+    if(ico) ico.setAttribute('stroke',c);
+  });
+  const t=TITLES[v];
+  document.getElementById('hdr-sub').textContent=t[0];
+  document.getElementById('hdr-title').textContent=t[1];
+  document.getElementById('main').scrollTop=0;
+  if(v==='dashboard') renderDash();
+  if(v==='stock'){ renderStCats(); renderStock(); }
+  if(v==='ventas') renderVentasList();
+  if(v==='reportes'){ selPer('hoy'); renderTops(); }
+}
+
+// ─── DASHBOARD ───────────────────────────────────────
+function renderDash(){
+  const now = new Date();
+  document.getElementById('dash-date').textContent = `${DAYS[now.getDay()]}, ${now.getDate()} de ${MONTHS[now.getMonth()]}`;
+
+  // Mini chart
+  const vals=[3400,5200,2800,7100,4900,6300,8200];
+  const maxV=Math.max(...vals);
+  document.getElementById('dash-chart').innerHTML = vals.map((v,i)=>
+    `<div style="flex:1;border-radius:4px 4px 0 0;background:rgba(255,255,255,${i===vals.length-1?.7:.3});height:${Math.max(6,Math.round((v/maxV)*40))}px"></div>`
+  ).join('');
+
+  // Alert
+  const lowP = PRODS.filter(p=>p.stock>0&&p.stock<=p.minStock);
+  const outP  = PRODS.filter(p=>p.stock===0);
+  const alertEl = document.getElementById('dash-alert');
+  if(lowP.length||outP.length){
+    alertEl.style.display='block';
+    alertEl.className='mb12';
+    alertEl.style.background='#FFF0F2'; alertEl.style.border='1.5px solid var(--c)'; alertEl.style.borderRadius='16px'; alertEl.style.padding='13px';
+    let h=`<div class="row gap8 mb8"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" fill="#F01D52" opacity=".2"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#F01D52" stroke-width="2" fill="none"/><line x1="12" y1="9" x2="12" y2="13" stroke="#F01D52" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#F01D52"/></svg><span class="f12 col-c" style="font-weight:800">Stock bajo — ${lowP.length+outP.length} producto${lowP.length+outP.length!==1?'s':''}</span></div>`;
+    [...outP,...lowP].slice(0,3).forEach(p=>{
+      h+=`<div class="row between mb4"><span class="f12 col-n" style="font-weight:600">${p.name}</span><span style="font-size:11px;background:${p.stock===0?'var(--c)':'var(--o)'};color:#fff;padding:2px 9px;border-radius:20px;font-weight:700">${p.stock===0?'Agotado':p.stock+' unid.'}</span></div>`;
+    });
+    alertEl.innerHTML=h;
+  } else { alertEl.style.display='none'; }
+
+  // Recent sales
+  document.getElementById('dash-sales').innerHTML = SALES.slice(0,3).map(s=>{
+    const payL = PAYS.find(p=>p.id===s.pay)?.label||s.pay;
+    const items = s.items.map(i=>{ const p=PRODS.find(x=>x.id===i.pid); return p?p.name.split(' ').slice(0,2).join(' '):'' }).join(' + ');
+    const stHtml = s.status==='completada' ? '<span class="bg-tag bg-green">Completada</span>' : '<span class="bg-tag bg-amber">En preparación</span>';
+    return `<div class="card row between mb8"><div><p class="f12 col-n" style="font-weight:700">#${s.id} ${s.type==='truck'?'🏪':'📦'} ${items}</p><p class="f10 col-g mt4">${payL} · ${s.ts}hs</p></div><div style="text-align:right"><p class="f13 col-n" style="font-weight:800">${fmt(s.total)}</p>${stHtml}</div></div>`;
+  }).join('');
+
+  // Top
+  const simSales=[48,31,19];
+  document.getElementById('dash-tops').innerHTML = PRODS.slice(0,3).map((p,i)=>
+    `<div class="card row gap11 mb8"><div style="width:28px;height:28px;border-radius:8px;background:${p.bg};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:rgba(0,0,0,.3);flex-shrink:0">${i+1}</div><div style="flex:1"><p class="f12 col-n" style="font-weight:700">${p.name}</p><p class="f10 col-g mt4">${simSales[i]} vendidos este mes</p></div><p class="f13 col-o" style="font-weight:800">${fmt(p.price)}</p></div>`
+  ).join('');
+}
+
+// ─── STOCK ───────────────────────────────────────────
+let stCat = 'Todos';
+function renderStCats(){
+  const el = document.getElementById('st-cats');
+  el.innerHTML = ['Todos',...CATS].map(c=>`<span class="cchip${c===stCat?' on':''}" style="flex-shrink:0" onclick="setStCat('${c}')">${c}</span>`).join('');
+}
+function setStCat(c){ stCat=c; renderStCats(); renderStock(); }
+function renderStock(){
+  const q=(document.getElementById('st-search')?.value||'').toLowerCase();
+  const f=PRODS.filter(p=>(stCat==='Todos'||p.cat===stCat)&&(!q||p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)));
+  document.getElementById('st-total').textContent=f.length;
+  document.getElementById('st-low').textContent=f.filter(p=>p.stock>0&&p.stock<=p.minStock).length;
+  document.getElementById('st-out').textContent=f.filter(p=>p.stock===0).length;
+  const list=document.getElementById('st-list');
+  if(!f.length){list.innerHTML='<div style="text-align:center;padding:32px;color:var(--g);font-size:13px">No se encontraron productos</div>';return;}
+  list.innerHTML=f.map(p=>{
+    const low=p.stock>0&&p.stock<=p.minStock, out=p.stock===0;
+    const tc=out?'var(--c)':low?'var(--o)':'var(--n)';
+    const bl=out?'border-left:3px solid var(--c);':low?'border-left:3px solid var(--o);':'';
+    const bg=p.photo?`background-image:url('${p.photo}');background-size:cover;background-position:center`:`background:${p.bg}`;
+    return `<div class="prod-row" style="${bl}cursor:pointer" onclick="openSS(${p.id})">
+      <div class="pdot" style="${bg}"></div>
+      <div style="flex:1;min-width:0"><p class="f12 col-n" style="font-weight:700">${p.name}</p><p class="f10 col-g mt4">${p.cat} · ${fmt(p.price)}</p></div>
+      <div style="text-align:right;flex-shrink:0"><p style="font-size:15px;font-weight:800;color:${tc}">${p.stock}</p><p class="f10 col-g">${out?'agotado':'unidades'}</p></div>
+    </div>`;
+  }).join('');
+}
+
+// ─── STOCK SHEET ─────────────────────────────────────
+let ssId=null, ssOrigCost=null;
+function openSS(id){
+  const p=PRODS.find(x=>x.id===id); if(!p) return;
+  ssId=id; ssOrigCost=p.cost;
+  const bg=p.photo?`background-image:url('${p.photo}');background-size:cover;background-position:center`:`background:${p.bg}`;
+  document.getElementById('ss-dot').style.cssText=`width:52px;height:52px;border-radius:14px;flex-shrink:0;${bg}`;
+  document.getElementById('ss-name').textContent=p.name;
+  document.getElementById('ss-cat').textContent=p.cat;
+  document.getElementById('ss-cost').value=p.cost;
+  document.getElementById('ss-price').value=p.price;
+  document.getElementById('ss-stock').textContent=p.stock;
+  document.getElementById('ss-notice').style.display='none';
+  // History
+  const hist=document.getElementById('ss-hist'), histList=document.getElementById('ss-hist-list');
+  if(p.costHistory&&p.costHistory.length>1){
+    hist.style.display='block';
+    histList.innerHTML=p.costHistory.map((h,i)=>`<div class="hist-row"><span class="f12 col-g">${h.date}</span><span class="f12 col-n" style="font-weight:700">${fmt(h.v)}</span>${i===p.costHistory.length-1?'<span class="bg-tag bg-green" style="font-size:9px">Actual</span>':''}</div>`).join('');
+  } else { hist.style.display='none'; }
+  document.getElementById('ssheet').classList.add('open');
+  document.getElementById('dimmer').classList.add('on');
+}
+function closeSS(){
+  document.getElementById('ssheet').classList.remove('open');
+  document.getElementById('dimmer').classList.remove('on');
+  ssId=null;
+}
+function ssNotice(){
+  const newCost=parseFloat(document.getElementById('ss-cost').value)||0;
+  document.getElementById('ss-notice').style.display=(ssId&&newCost&&newCost!==ssOrigCost)?'flex':'none';
+}
+function ssAdj(d){ const p=PRODS.find(x=>x.id===ssId); if(!p)return; p.stock=Math.max(0,p.stock+d); document.getElementById('ss-stock').textContent=p.stock; }
+function saveSS(){
+  const p=PRODS.find(x=>x.id===ssId); if(!p) return;
+  const nc=parseFloat(document.getElementById('ss-cost').value)||p.cost;
+  const np=parseFloat(document.getElementById('ss-price').value)||p.price;
+  if(nc!==p.cost){ p.costHistory=p.costHistory||[]; p.costHistory.push({date:today(),v:nc}); }
+  p.cost=nc; p.price=np;
+  renderStock(); closeSS();
+}
+
+// ─── VENTAS LIST ─────────────────────────────────────
+function renderVentasList(){
+  document.getElementById('ventas-list').innerHTML = SALES.map(s=>{
+    const payL=PAYS.find(p=>p.id===s.pay)?.label||s.pay;
+    const items=s.items.map(i=>{ const p=PRODS.find(x=>x.id===i.pid); return p?`${p.name.split(' ').slice(0,2).join(' ')} ×${i.qty}`:'' }).join(' · ');
+    const stHtml=s.status==='completada'?'<span class="bg-tag bg-green">Completada</span>':'<span class="bg-tag bg-amber">En preparación</span>';
+    return `<div class="card mb8">
+      <div class="row between mb8"><div><p class="f12 col-n" style="font-weight:700">#${s.id} ${s.type==='truck'?'🏪':'📦'}</p><p class="f10 col-g mt4">${payL} · ${s.ts}hs</p></div>${stHtml}</div>
+      <div style="height:.5px;background:rgba(0,0,0,.07);margin:0 0 8px"></div>
+      <div class="row between"><span class="f10 col-g">${items}</span><span class="f13 col-n" style="font-weight:800">${fmt(s.total)}</span></div>
+      ${s.status==='en-preparacion'?`<button onclick="markDone(${s.id})" style="margin-top:10px;width:100%;background:#E8FBF5;color:#065F46;border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">✓ Marcar como completada</button>`:''}
+    </div>`;
+  }).join('');
+}
+function markDone(id){ const s=SALES.find(x=>x.id===id); if(s) s.status='completada'; renderVentasList(); }
+
+// ─── VENTA FLOW ──────────────────────────────────────
+let cart={}, vPay=null, vStep=0, vType='truck';
+
+function openVenta(){
+  cart={}; vPay=null; vStep=0; vType='truck';
+  const disc=document.getElementById('disc'); if(disc) disc.value='';
+  document.getElementById('venta').classList.add('open');
+  ['tt-truck','tt-del'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.classList.toggle('on', id==='tt-truck');
+    el.querySelector('svg').setAttribute('stroke', id==='tt-truck'?'#FF4B2B':'#9CA3AF');
+  });
+  setVStep(0);
+}
+function closeVenta(){ document.getElementById('venta').classList.remove('open'); }
+function selType(t){
+  vType=t;
+  const map={truck:'tt-truck',delivery:'tt-del'};
+  ['truck','delivery'].forEach(k=>{ const el=document.getElementById(map[k]); el.classList.toggle('on',k===t); el.querySelector('svg').setAttribute('stroke',k===t?'#FF4B2B':'#9CA3AF'); });
+}
+function vS0Next(){ setVStep(1); }
+function vBack(){ vStep<=0 ? closeVenta() : setVStep(vStep-1); }
+
+function setVStep(s){
+  vStep=s;
+  ['0','1','2','3'].forEach(n=>{ const el=document.getElementById('vs'+n); if(el) el.style.display=String(s)===n?'block':'none'; });
+  [1,2,3,4].forEach(n=>{ const d=document.getElementById('vd'+n); if(!d)return; d.classList.toggle('on',n===s); d.classList.toggle('done',n<s); });
+  const titles={0:'Tipo de venta',1:'Elegir productos',2:'Método de pago',3:'Venta registrada'};
+  document.getElementById('v-title').textContent=titles[s]||'';
+  const isS3=s===3;
+  document.getElementById('v-foot').style.display=isS3?'none':'block';
+  document.getElementById('v-back').style.visibility=isS3?'hidden':'visible';
+  document.getElementById('v-s0-btn').style.display=s===0?'block':'none';
+  document.getElementById('v-cart-bar').style.display=(s===1||s===2)?'flex':'none';
+  const lbl=document.getElementById('cart-lbl'); if(lbl) lbl.textContent=s===2?'Confirmar':'Siguiente';
+  if(s===1) renderVProds();
+  updateCartBar();
+}
+
+function vNext(){
+  if(vStep===1){ if(!Object.keys(cart).length)return; setVStep(2); renderVSummary(); renderPayGrid(); }
+  else if(vStep===2){ if(!vPay)return; confirmVenta(); setVStep(3); }
+}
+
+const cartCount=()=>Object.values(cart).reduce((a,b)=>a+b,0);
+const cartSub=()=>Object.entries(cart).reduce((a,[id,q])=>{ const p=PRODS.find(x=>x.id==id); return a+(p?p.price*q:0); },0);
+const cartTotal=()=>{ const d=parseFloat(document.getElementById('disc')?.value)||0; return Math.round(cartSub()*(1-d/100)); };
+
+function updateCartBar(){
+  const c=cartCount(), t=vStep===2?cartTotal():cartSub();
+  const cc=document.getElementById('cart-count'), ca=document.getElementById('cart-amt'), cb=document.getElementById('cart-btn');
+  if(cc) cc.textContent=c+(c===1?' producto':' productos');
+  if(ca) ca.textContent=fmt(t);
+  if(cb) cb.style.opacity=(vStep===1&&c===0)||(vStep===2&&!vPay)?'0.45':'1';
+}
+
+function renderVProds(){
+  document.getElementById('v-prods').innerHTML=PRODS.map(p=>{
+    const q=cart[p.id]||0;
+    const bg=p.photo?`background-image:url('${p.photo}');background-size:cover;background-position:center`:`background:${p.bg}`;
+    return `<div class="prod-row">
+      <div class="pdot" style="${bg};flex-shrink:0"></div>
+      <div style="flex:1;min-width:0"><p class="f12 col-n" style="font-weight:700">${p.name}</p><p class="f10 col-g mt4">${fmt(p.price)}${p.stock<=p.minStock?' <span style="color:var(--c);font-weight:700">· poco stock</span>':''}</p></div>
+      <div class="row gap8" style="flex-shrink:0">
+        ${q>0?`<button class="qb" style="width:28px;height:28px;background:#F5F3EF;color:var(--n)" onclick="chQty(${p.id},-1)">−</button><span style="font-size:14px;font-weight:800;color:var(--n);min-width:20px;text-align:center">${q}</span>`:''}
+        <button class="qb" style="width:28px;height:28px;background:var(--o);color:#fff" onclick="chQty(${p.id},1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function chQty(id,d){ const p=PRODS.find(x=>x.id===id); cart[id]=Math.max(0,Math.min(p.stock,(cart[id]||0)+d)); if(!cart[id]) delete cart[id]; renderVProds(); updateCartBar(); }
+
+function renderVSummary(){
+  let h='';
+  Object.entries(cart).forEach(([id,q])=>{ const p=PRODS.find(x=>x.id==id); if(!p)return; h+=`<div class="row between mb8"><div class="row gap8"><div style="width:8px;height:8px;background:${p.bg};border-radius:50%;flex-shrink:0;margin-top:3px"></div><span class="f12 col-n">${p.name} <span class="col-g">×${q}</span></span></div><span class="f12 col-n" style="font-weight:700">${fmt(p.price*q)}</span></div>`; });
+  const disc=parseFloat(document.getElementById('disc')?.value)||0, sub=cartSub();
+  h+=`<div class="sep"></div><div class="row between mt8"><span class="f12 col-g">Subtotal</span><span class="f12 col-n" style="font-weight:700">${fmt(sub)}</span></div>`;
+  if(disc>0) h+=`<div class="row between mt4"><span class="f12 col-g">Descuento ${disc}%</span><span class="f12 col-o" style="font-weight:700">−${fmt(sub*disc/100)}</span></div>`;
+  h+=`<div class="row between mt8"><span class="f13 col-n" style="font-weight:700">Total</span><span style="font-size:16px;font-weight:800;color:var(--n)">${fmt(cartTotal())}</span></div>`;
+  document.getElementById('v-summary').innerHTML=h;
+}
+function onDiscChange(){ renderVSummary(); updateCartBar(); }
+function renderPayGrid(){
+  document.getElementById('pay-grid').innerHTML=PAYS.map(p=>`<div class="pay-tile${vPay===p.id?' on':''}" id="pt-${p.id}" onclick="selPay('${p.id}')"><div class="pay-ico" style="background:${p.bg}">${p.ic}</div><span class="f12 col-n" style="font-weight:700">${p.label}</span></div>`).join('');
+}
+function selPay(id){ vPay=id; PAYS.forEach(p=>{ const el=document.getElementById('pt-'+p.id); if(el)el.classList.toggle('on',p.id===id); }); updateCartBar(); }
+
+function confirmVenta(){
+  const payObj=PAYS.find(p=>p.id===vPay);
+  const disc=parseFloat(document.getElementById('disc')?.value)||0;
+  const sub=cartSub(), tot=cartTotal();
+  let h='';
+  const newS={id:1040+SALES.length+1,items:[],total:tot,pay:vPay,type:vType,status:vType==='delivery'?'en-preparacion':'completada',ts:new Date().toTimeString().slice(0,5)};
+  Object.entries(cart).forEach(([id,q])=>{ const p=PRODS.find(x=>x.id==id); if(!p)return; h+=`<div class="row between mb8"><span class="f12 col-n">${p.name} ×${q}</span><span class="f12 col-n" style="font-weight:700">${fmt(p.price*q)}</span></div>`; p.stock=Math.max(0,p.stock-q); newS.items.push({pid:p.id,qty:q}); });
+  SALES.unshift(newS);
+  document.getElementById('conf-items').innerHTML=h;
+  document.getElementById('conf-disc').textContent=disc>0?`−${disc}%`:'—';
+  document.getElementById('conf-total').textContent=fmt(tot);
+  document.getElementById('conf-pay').textContent=payObj?payObj.label:'—';
+  document.getElementById('conf-type').textContent=vType==='truck'?'🏪 Foodtruck':'📦 Delivery';
+  document.getElementById('conf-status').textContent=vType==='delivery'?'En preparación':'Completada';
+  document.getElementById('conf-status').className=`bg-tag ${vType==='delivery'?'bg-amber':'bg-green'}`;
+  document.getElementById('conf-num').textContent='#'+newS.id;
+}
+
+// ─── ADD PRODUCT ─────────────────────────────────────
+let apStep=1, apCat=null, apSv=0, apMv=5, apPhoto=null, apBg=PALETTES[0];
+
+function openAddProd(){
+  apStep=1; apCat=null; apSv=0; apMv=5; apPhoto=null; apBg=PALETTES[0];
+  ['ap-nombre','ap-marca','ap-prov'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+  ['ap-cost','ap-price'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+  document.getElementById('margin-val').textContent='—'; document.getElementById('margin-val').style.color='#C4C2BD';
+  document.getElementById('margin-badge').style.display='none'; document.getElementById('margin-card').style.background='var(--bg)';
+  document.getElementById('ap-s-disp').textContent='0'; document.getElementById('ap-m-disp').textContent='5';
+  document.getElementById('ap-err1').style.display='none'; document.getElementById('ap-err2').style.display='none';
+  resetPhoto(); renderApCats(); buildPaletteRow(); setApStep(1);
+  document.getElementById('add-prod').classList.add('open');
+}
+function closeAddProd(){ document.getElementById('add-prod').classList.remove('open'); }
+
+function setApStep(s){
+  apStep=s;
+  [1,2,3,4].forEach(n=>{ document.getElementById('aps'+n).style.display=n===s?'block':'none'; const d=document.getElementById('apd'+n); if(d){d.classList.toggle('on',n===s);d.classList.toggle('done',n<s);} });
+  document.getElementById('ap-title').textContent={1:'Nuevo producto',2:'Precios',3:'Stock inicial',4:'Vista previa'}[s];
+  document.getElementById('ap-foot').style.display=s===4?'none':'block';
+  document.getElementById('ap-back').style.visibility=s===1?'hidden':'visible';
+  document.getElementById('ap-btn').textContent=s===3?'Ver vista previa':'Siguiente';
+  apValidate();
+}
+function apBack(){ apStep>1?setApStep(apStep-1):closeAddProd(); }
+function apNext(){
+  if(apStep===1){
+    if(!document.getElementById('ap-nombre').value.trim()||!apCat){ document.getElementById('ap-err1').style.display='block'; return; }
+    document.getElementById('ap-err1').style.display='none'; setApStep(2);
+  } else if(apStep===2){
+    if(!parseFloat(document.getElementById('ap-cost').value)||!parseFloat(document.getElementById('ap-price').value)){ document.getElementById('ap-err2').style.display='block'; return; }
+    document.getElementById('ap-err2').style.display='none'; setApStep(3);
+  } else if(apStep===3){ buildPreview(); setApStep(4); }
+}
+function apValidate(){
+  let ok=false;
+  if(apStep===1) ok=!!(document.getElementById('ap-nombre')?.value.trim())&&apCat!==null;
+  else if(apStep===2) ok=parseFloat(document.getElementById('ap-cost')?.value)>0&&parseFloat(document.getElementById('ap-price')?.value)>0;
+  else ok=true;
+  const btn=document.getElementById('ap-btn'); if(btn) btn.style.opacity=ok?'1':'0.45';
+}
+
+function renderApCats(){
+  const el=document.getElementById('ap-cats');
+  el.innerHTML=CATS.map(c=>`<span class="cchip${c===apCat?' on':''}" onclick="selApCat('${c}')">${c}</span>`).join('')+`<span class="cchip new" onclick="toggleNewCat()">+ Nueva</span>`;
+  document.getElementById('new-cat-row').style.display='none';
+}
+function selApCat(c){ apCat=c; renderApCats(); apValidate(); }
+function toggleNewCat(){ const r=document.getElementById('new-cat-row'); r.style.display=r.style.display==='none'?'flex':'none'; if(r.style.display==='flex') document.getElementById('new-cat-in').focus(); }
+function addCat(){ const v=document.getElementById('new-cat-in').value.trim(); if(v&&!CATS.includes(v)) CATS.push(v); if(v) apCat=v; document.getElementById('new-cat-in').value=''; renderApCats(); apValidate(); }
+
+function buildPaletteRow(){
+  const row=document.getElementById('palette-row');
+  row.innerHTML='<span class="f11 col-g" style="margin-right:4px;white-space:nowrap">Color:</span>'+PALETTES.map((c,i)=>`<div onclick="setApBg('${c}')" style="width:22px;height:22px;border-radius:50%;background:${c};cursor:pointer;border:2px solid ${c===apBg?'var(--n)':'transparent'};transition:border .15s" id="pal-${i}"></div>`).join('');
+}
+function setApBg(c){ apBg=c; if(!apPhoto){ document.getElementById('photo-area').style.background=c; } buildPaletteRow(); }
+
+function triggerPhoto(){ document.getElementById('photo-file').click(); }
+function handlePhoto(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    apPhoto=ev.target.result;
+    const a=document.getElementById('photo-area');
+    a.style.backgroundImage=`url('${apPhoto}')`;a.style.backgroundSize='cover';a.style.backgroundPosition='center';a.style.background='';a.style.border='none';
+    document.getElementById('photo-ph').style.display='none';
+    document.getElementById('photo-change').style.display='block';
+  };
+  r.readAsDataURL(file);
+}
+function resetPhoto(){
+  apPhoto=null;
+  const a=document.getElementById('photo-area');
+  a.style.backgroundImage='';a.style.background=apBg;a.style.border='2px dashed #D9D6D0';
+  document.getElementById('photo-ph').style.display='flex';
+  document.getElementById('photo-change').style.display='none';
+  const pf=document.getElementById('photo-file'); if(pf)pf.value='';
+}
+
+function calcMargin(){
+  const cost=parseFloat(document.getElementById('ap-cost').value)||0;
+  const price=parseFloat(document.getElementById('ap-price').value)||0;
+  const mv=document.getElementById('margin-val'), mb=document.getElementById('margin-badge'), mc=document.getElementById('margin-card');
+  if(!cost||!price){mv.textContent='—';mv.style.color='#C4C2BD';mb.style.display='none';mc.style.background='var(--bg)';apValidate();return;}
+  const m=Math.round(((price-cost)/price)*100);
+  mv.textContent=m+'%';
+  let bg,tc,tag,sub;
+  if(m<20){bg='#FFF0F2';tc='var(--c)';tag='Margen bajo';sub='Revisá los precios';}
+  else if(m<40){bg='#FEF3C7';tc='#92400E';tag='Margen regular';sub='Puede mejorar';}
+  else{bg='#E8FBF5';tc='#065F46';tag='Buen margen';sub='Todo en orden';}
+  mv.style.color=tc; mb.style.display='block'; mb.style.background=bg; mc.style.background=bg;
+  document.getElementById('margin-tag').textContent=tag; document.getElementById('margin-tag').style.color=tc;
+  document.getElementById('margin-sub').textContent=sub; document.getElementById('margin-sub').style.color=tc;
+  apValidate();
+}
+
+function apAdj(t,d){ if(t==='s'){apSv=Math.max(0,apSv+d);document.getElementById('ap-s-disp').textContent=apSv;} else {apMv=Math.max(0,apMv+d);document.getElementById('ap-m-disp').textContent=apMv;} }
+
+function buildPreview(){
+  const nombre=document.getElementById('ap-nombre').value.trim();
+  const cost=parseFloat(document.getElementById('ap-cost').value)||0;
+  const price=parseFloat(document.getElementById('ap-price').value)||0;
+  const marca=document.getElementById('ap-marca').value.trim();
+  const prov=document.getElementById('ap-prov').value.trim();
+  const m=price>0&&cost>0?Math.round(((price-cost)/price)*100):0;
+  const mColor=m<20?'var(--c)':m<40?'#92400E':'#065F46';
+  const mBg=m<20?'#FFF0F2':m<40?'#FEF3C7':'#E8FBF5';
+  const dot=document.getElementById('prev-dot');
+  if(apPhoto){dot.style.backgroundImage=`url('${apPhoto}')`;dot.style.backgroundSize='cover';dot.style.backgroundPosition='center';dot.style.background='';}
+  else{dot.style.background=apBg;dot.style.backgroundImage='';}
+  document.getElementById('prev-name').textContent=nombre;
+  document.getElementById('prev-cat').textContent=(marca?marca+' · ':'')+apCat;
+  document.getElementById('prev-price').textContent=fmt(price);
+  const pmb=document.getElementById('prev-mb');pmb.textContent=m+'% margen';pmb.style.background=mBg;pmb.style.color=mColor;
+  document.getElementById('prev-stock').textContent=apSv;
+  document.getElementById('prev-cost').textContent=fmt(cost);
+  document.getElementById('prev-pv').textContent=fmt(price);
+  document.getElementById('prev-min').textContent=apMv+' unidades';
+  const pr=document.getElementById('prev-prow');const pp=document.getElementById('prev-prov');
+  if(prov){pp.textContent=prov;pr.style.display='flex';}else pr.style.display='none';
+}
+
+function confirmAddProd(){
+  const nombre=document.getElementById('ap-nombre').value.trim();
+  const cost=parseFloat(document.getElementById('ap-cost').value)||0;
+  const price=parseFloat(document.getElementById('ap-price').value)||0;
+  const marca=document.getElementById('ap-marca').value.trim();
+  const prov=document.getElementById('ap-prov').value.trim();
+  PRODS.push({id:PRODS.length+1,name:nombre,cat:apCat,price,cost,stock:apSv,minStock:apMv,bg:apBg,photo:apPhoto||null,marca,prov,costHistory:[{date:today(),v:cost}]});
+  closeAddProd(); showView('stock');
+}
+
+// ─── REPORTES ────────────────────────────────────────
+let topExpanded=false;
+function selPer(p){
+  ['hoy','sem','mes','ano','custom'].forEach(k=>{ const b=document.getElementById('pb-'+k); if(b)b.classList.toggle('on',k===p); });
+  document.getElementById('custom-range').style.display=p==='custom'?'grid':'none';
+  if(PERIODS[p]){ const d=PERIODS[p]; document.getElementById('r-total').textContent=d.total; document.getElementById('r-margen').textContent=d.margen; document.getElementById('r-ticket').textContent=d.ticket; document.getElementById('r-cant').textContent=d.cant; renderChart(d.chart); }
+}
+function renderChart(data){
+  const el=document.getElementById('r-chart'); if(!el||!data)return;
+  const max=Math.max(...data.map(d=>d.v),1);
+  el.innerHTML=data.map(d=>{ const pct=Math.round((d.v/max)*100); return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:100%;background:#F0EDEA;border-radius:4px 4px 0 0;height:58px;display:flex;align-items:flex-end;overflow:hidden"><div style="width:100%;background:#FF4B2B;height:${pct}%;opacity:${pct>5?1:.25};border-radius:3px 3px 0 0;transition:height .4s"></div></div><span style="font-size:9px;color:#9CA3AF">${d.l}</span></div>`; }).join('');
+}
+const simQ=[48,31,19,14,11,9,7,5,4,2];
+function renderTops(){
+  const limit=topExpanded?10:5;
+  const byQ=[...PRODS].slice(0,limit);
+  document.getElementById('top-qty').innerHTML=byQ.map((p,i)=>{
+    const q=simQ[i]||1;
+    return `<div class="top-row"><span style="font-size:12px;font-weight:800;color:${i<3?['var(--o)','var(--c)','var(--m)'][i]:'#9CA3AF'};min-width:16px">${i+1}</span><div style="flex:1"><div class="row between"><span class="f11 col-n" style="font-weight:700">${p.name}</span><span class="f11 col-g">${q} uds</span></div><div style="background:#F0EDEA;border-radius:4px;height:5px;margin-top:5px"><div style="background:var(--o);height:5px;border-radius:4px;width:${Math.round((q/simQ[0])*100)}%"></div></div></div></div>`;
+  }).join('');
+
+  const byM=[...PRODS].sort((a,b)=>{ const ma=Math.round(((a.price-a.cost)/a.price)*100); const mb=Math.round(((b.price-b.cost)/b.price)*100); return mb-ma; });
+  document.getElementById('top-margin').innerHTML=byM.slice(0,5).map((p,i)=>{
+    const m=Math.round(((p.price-p.cost)/p.price)*100);
+    const tc=m<20?'var(--c)':m<40?'#92400E':'#065F46'; const bc=m<20?'#FFF0F2':m<40?'#FEF3C7':'#E8FBF5';
+    return `<div class="top-row"><span style="font-size:12px;font-weight:800;color:${i<3?['var(--o)','var(--c)','var(--m)'][i]:'#9CA3AF'};min-width:16px">${i+1}</span><div style="flex:1"><div class="row between"><span class="f11 col-n" style="font-weight:700">${p.name}</span><span style="font-size:11px;padding:2px 9px;border-radius:20px;font-weight:700;background:${bc};color:${tc}">${m}%</span></div><p class="f10 col-g mt4">${fmt(p.price)} · Costo ${fmt(p.cost)}</p></div></div>`;
+  }).join('');
+}
+function toggleTop(){ topExpanded=!topExpanded; document.getElementById('top-btn').textContent=topExpanded?'Ver top 5':'Ver top 10'; renderTops(); }
+
+// ─── INIT ────────────────────────────────────────────
+refreshAvatar();
+showView('dashboard');
+</script>
+</body>
+</html>

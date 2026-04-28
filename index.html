@@ -187,10 +187,10 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
         <div class="row between mb12">
           <div>
             <p style="font-size:11px;opacity:.75;margin-bottom:4px">Ventas hoy</p>
-            <p style="font-size:28px;font-weight:800;letter-spacing:-.5px;line-height:1">$8.200</p>
+            <p style="font-size:28px;font-weight:800;letter-spacing:-.5px;line-height:1">$0</p>
             <div style="margin-top:8px;background:rgba(255,255,255,.2);display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>
-              <span style="font-size:11px;font-weight:700">+12% vs ayer</span>
+              <span style="font-size:11px;font-weight:700">Sin ventas hoy</span>
             </div>
           </div>
           <div class="mini-bar" id="dash-chart"></div>
@@ -198,15 +198,15 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
         <div class="g3">
           <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:10px">
             <p style="font-size:9px;opacity:.7;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">Ticket</p>
-            <p style="font-size:16px;font-weight:800">$1.640</p>
+            <p style="font-size:16px;font-weight:800">$0</p>
           </div>
           <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:10px">
             <p style="font-size:9px;opacity:.7;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">Margen</p>
-            <p style="font-size:16px;font-weight:800">42%</p>
+            <p style="font-size:16px;font-weight:800">—</p>
           </div>
           <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:10px">
             <p style="font-size:9px;opacity:.7;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">Ventas</p>
-            <p style="font-size:16px;font-weight:800">15</p>
+            <p style="font-size:16px;font-weight:800">0</p>
           </div>
         </div>
       </div>
@@ -248,8 +248,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
     <!-- ── VENTAS LIST ── -->
     <div id="view-ventas" class="vp" style="display:none">
       <div class="g2 mb12">
-        <div class="card"><p class="lbl">Ventas hoy</p><p class="val">15</p></div>
-        <div class="card"><p class="lbl">Total hoy</p><p class="val">$8.200</p></div>
+        <div class="card"><p class="lbl">Ventas hoy</p><p class="val">0</p></div>
+        <div class="card"><p class="lbl">Total hoy</p><p class="val">$0</p></div>
       </div>
       <p class="stitle">Ventas de hoy</p>
       <div id="ventas-list"></div>
@@ -271,10 +271,10 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
         <div><p class="lbl mb4">Hasta</p><input type="date" class="d-inp" id="date-to"/></div>
       </div>
       <div class="g2 mb12">
-        <div class="card"><p class="lbl">Total ventas</p><p id="r-total" class="val">$8.200</p></div>
-        <div class="card"><p class="lbl">Margen</p><p id="r-margen" class="val col-m">43%</p></div>
-        <div class="card"><p class="lbl">Ticket prom.</p><p id="r-ticket" class="val">$1.640</p></div>
-        <div class="card"><p class="lbl">Cant. ventas</p><p id="r-cant" class="val">15</p></div>
+        <div class="card"><p class="lbl">Total ventas</p><p id="r-total" class="val">$0</p></div>
+        <div class="card"><p class="lbl">Margen</p><p id="r-margen" class="val col-m">—</p></div>
+        <div class="card"><p class="lbl">Ticket prom.</p><p id="r-ticket" class="val">$0</p></div>
+        <div class="card"><p class="lbl">Cant. ventas</p><p id="r-cant" class="val">0</p></div>
       </div>
       <div class="card mb12">
         <p class="f12 col-n mb8" style="font-weight:700">Ventas por período</p>
@@ -700,23 +700,9 @@ const today = () => new Date().toISOString().split('T')[0];
 
 let CATS = ['Snacks','Juguetes','Higiene','Accesorios','Ropa'];
 
-let PRODS = [
-  {id:1,name:'Snacks Premium Mix',      cat:'Snacks',     price:850, cost:500,  stock:3,  minStock:5,  bg:'#FFD0DA', photo:null, costHistory:[{date:'2025-01-10',v:450},{date:'2025-03-01',v:500}]},
-  {id:2,name:'Shampoo Naturale 500ml',  cat:'Higiene',    price:1800,cost:900,  stock:7,  minStock:5,  bg:'#E0F7F1', photo:null, costHistory:[{date:'2025-01-10',v:900}]},
-  {id:3,name:'Kong Classic M',          cat:'Juguetes',   price:4500,cost:2200, stock:18, minStock:3,  bg:'#EDE9FE', photo:null, costHistory:[{date:'2025-01-10',v:2200}]},
-  {id:4,name:'Collar Reflectivo',       cat:'Accesorios', price:2200,cost:1100, stock:12, minStock:4,  bg:'#DBEAFE', photo:null, costHistory:[{date:'2025-01-10',v:1100}]},
-  {id:5,name:'Collar Antipulgas M',     cat:'Accesorios', price:3100,cost:1600, stock:5,  minStock:6,  bg:'#FEF3C7', photo:null, costHistory:[{date:'2025-01-10',v:1600}]},
-  {id:6,name:'Cuerda Juguete Grande',   cat:'Juguetes',   price:1200,cost:600,  stock:15, minStock:4,  bg:'#DCFCE7', photo:null, costHistory:[{date:'2025-01-10',v:600}]},
-  {id:7,name:'Pipeta Antiparasitaria',  cat:'Higiene',    price:2400,cost:1200, stock:20, minStock:5,  bg:'#FFF7ED', photo:null, costHistory:[{date:'2025-01-10',v:1200}]},
-  {id:8,name:'Cama Ortopédica M',       cat:'Accesorios', price:8500,cost:4000, stock:4,  minStock:2,  bg:'#EEF2FF', photo:null, costHistory:[{date:'2025-01-10',v:4000}]},
-];
+let PRODS = [];
 
-let SALES = [
-  {id:1042,items:[{pid:1,qty:2},{pid:5,qty:1}],total:3200,pay:'mercadopago',type:'truck',status:'completada',ts:'14:23'},
-  {id:1041,items:[{pid:2,qty:1}],total:1800,pay:'efectivo',type:'delivery',status:'en-preparacion',ts:'13:47'},
-  {id:1040,items:[{pid:3,qty:1},{pid:1,qty:1}],total:5350,pay:'transferencia',type:'truck',status:'completada',ts:'12:10'},
-  {id:1039,items:[{pid:4,qty:1}],total:2200,pay:'tarjeta',type:'truck',status:'completada',ts:'11:35'},
-];
+let SALES = [];
 
 const PAYS = [
   {id:'efectivo',     label:'Efectivo',     bg:'#DCFCE7', ic:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>'},
@@ -747,8 +733,15 @@ function lsSave(){
     localStorage.setItem('ami_cats',    JSON.stringify(CATS));
   }catch(e){}
 }
+const APP_VERSION = '2.0';
 function lsLoad(){
   try{
+    // Wipe stale data if version mismatch
+    if(localStorage.getItem('ami_ver') !== APP_VERSION){
+      ['ami_profile','ami_prods','ami_sales','ami_cats','ami_pin'].forEach(k=>localStorage.removeItem(k));
+      localStorage.setItem('ami_ver', APP_VERSION);
+      return;
+    }
     const p=localStorage.getItem('ami_profile'); if(p) Object.assign(profile, JSON.parse(p));
     const pr=localStorage.getItem('ami_prods');  if(pr) PRODS.splice(0,PRODS.length,...JSON.parse(pr));
     const sa=localStorage.getItem('ami_sales');  if(sa) SALES.splice(0,SALES.length,...JSON.parse(sa));
@@ -800,7 +793,7 @@ function savePin(){
 }
 
 // ─── PROFILE ─────────────────────────────────────────
-let profile = {name:'Laura', biz:'Amichis', color:'#FF4B2B', photo:null};
+let profile = {name:'', biz:'Amichis', color:'#FF4B2B', photo:null};
 let avColorIdx = 0;
 
 function refreshAvatar(){
@@ -1209,7 +1202,7 @@ function confirmVenta(){
   const sub=cartSub(), tot=cartTotal();
   let h='';
   const isDelivery=vType==='delivery';
-  const newS={id:1040+SALES.length+1,items:[],total:tot,pay:vPay,type:vType,status:isDelivery?'en-preparacion':'completada',pendingPay:false,ts:new Date().toTimeString().slice(0,5)};
+  const newS={id:(SALES.length ? Math.max(...SALES.map(s=>s.id))+1 : 1001),items:[],total:tot,pay:vPay,type:vType,status:isDelivery?'en-preparacion':'completada',pendingPay:false,ts:new Date().toTimeString().slice(0,5)};
   Object.entries(cart).forEach(([id,q])=>{ const p=PRODS.find(x=>x.id==id); if(!p)return; h+=`<div class="row between mb8"><span class="f12 col-n">${p.name} ×${q}</span><span class="f12 col-n" style="font-weight:700">${fmt(p.price*q)}</span></div>`; p.stock=Math.max(0,p.stock-q); newS.items.push({pid:p.id,qty:q}); });
   SALES.unshift(newS);
   document.getElementById('conf-items').innerHTML=h;

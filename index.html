@@ -15,8 +15,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
 :root{--o:#FF4B2B;--c:#F01D52;--m:#6DCBB0;--pk:#FFD0DA;--n:#1C2033;--g:#6B7280;--bg:#F5F3EF;--w:#fff}
 #app{width:100%;max-width:480px;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;height:100dvh;position:relative;overflow:hidden}
 @media(min-width:480px){body{background:#D9D4CC;display:flex;justify-content:center;padding:24px 0}#app{height:860px;border-radius:36px;box-shadow:0 40px 80px rgba(0,0,0,.25)}}
-.hdr{background:var(--o);padding:20px 20px 18px;color:#fff;flex-shrink:0}
-.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.hdr{background:var(--o);padding:11px 16px 10px;color:#fff;flex-shrink:0}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:0}
 #main{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
 #main::-webkit-scrollbar{display:none}
 .vp{padding:14px}
@@ -151,6 +151,10 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
 .qbig:active{transform:scale(.88)}
 /* Notice box */
 .notice{background:#FFF7ED;border-radius:12px;padding:10px 13px;margin-bottom:12px;font-size:11px;color:#92400E;font-weight:600;display:flex;gap:7px;align-items:flex-start}
+.pinbtn{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.18);border:none;color:#fff;font-size:22px;font-weight:700;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.pinbtn:active{background:rgba(255,255,255,.35)}
+.pind{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.5);transition:background .2s}
+.pind.on{background:#fff;border-color:#fff}
 </style>
 </head>
 <body>
@@ -159,16 +163,18 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
   <!-- HEADER -->
   <div class="hdr">
     <div class="hdr-top">
-      <div class="row gap8">
-        <div style="width:32px;height:32px;background:rgba(255,255,255,.95);border-radius:50%;display:flex;align-items:center;justify-content:center">
-          <svg width="18" height="13" viewBox="0 0 18 13"><rect x="0" y="0" width="4.5" height="13" rx="2.25" fill="#FF4B2B"/><rect x="3.5" y="3" width="4.5" height="10" rx="2.25" fill="#FF4B2B"/><rect x="10" y="3" width="4.5" height="10" rx="2.25" fill="#FF4B2B"/><rect x="13.5" y="0" width="4.5" height="13" rx="2.25" fill="#FF4B2B"/></svg>
-        </div>
-        <span style="font-size:18px;font-weight:800;letter-spacing:-.5px">amichis</span>
+      <!-- Isotipo + wordmark -->
+      <div class="row gap8" style="align-items:center">
+        <svg width="32" height="32" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="250" cy="249.507" rx="250" ry="249.507" fill="rgba(255,255,255,0.95)"/>
+          <path d="M350.584 128.237C330.142 127.446 312.985 142.175 309.965 161.556H309.833C309.361 166.849 304.907 170.992 299.489 170.992C294.072 170.992 289.561 166.792 289.146 161.462C286.164 142.627 269.818 128.219 250.113 128.219C230.408 128.219 214.005 142.665 211.061 161.556H210.985C210.513 166.849 206.059 170.992 200.642 170.992C195.225 170.992 190.77 166.849 190.299 161.556H190.242C187.297 142.665 170.933 128.219 151.19 128.219C151.152 128.219 151.114 128.219 151.077 128.219C151.039 128.219 151.001 128.219 150.963 128.219C129.144 128.219 111.439 145.867 111.439 167.659V331.371C111.439 353.144 129.125 370.811 150.963 370.811C172.783 370.811 190.487 353.162 190.487 331.371V289.915C190.619 289.068 190.695 288.22 190.695 287.335V204.462H190.752C190.752 199.056 195.149 194.668 200.566 194.668C205.984 194.668 210.381 199.056 210.381 204.462H210.57V255.41C210.57 276.486 226.897 294.323 247.999 295.415C270.781 296.602 289.618 278.501 289.618 256.031V204.462H289.656C289.656 199 294.091 194.555 299.584 194.555C305.076 194.555 309.512 198.981 309.512 204.462V330.749C309.512 351.825 325.839 369.662 346.941 370.754C369.723 371.941 388.56 353.84 388.56 331.371V168.337C388.56 147.035 371.931 129.066 350.602 128.237H350.584Z" fill="#FF5738"/>
+        </svg>
+        <span style="font-size:17px;font-weight:800;letter-spacing:-.4px">amichis</span>
+        <span id="hdr-title" style="font-size:12px;font-weight:600;opacity:.75;margin-left:4px;padding-left:8px;border-left:1.5px solid rgba(255,255,255,.35)"></span>
       </div>
-      <div id="hdr-av" class="av" onclick="openSettings()" style="width:38px;height:38px;font-size:15px;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.35)">L</div>
+      <!-- Avatar -->
+      <div id="hdr-av" class="av" onclick="openSettings()" style="width:34px;height:34px;font-size:13px;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.35);overflow:hidden;background-size:cover;background-position:center">L</div>
     </div>
-    <p id="hdr-sub" style="font-size:11px;opacity:.75;margin-bottom:2px"></p>
-    <p id="hdr-title" style="font-size:21px;font-weight:800;margin-bottom:18px;letter-spacing:-.3px"></p>
   </div>
 
   <!-- MAIN -->
@@ -299,6 +305,36 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
   </nav>
 
   <!-- ── SETTINGS ── -->
+  <!-- ── PIN SCREEN ── -->
+  <div id="pin-screen" style="position:absolute;inset:0;background:var(--o);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0">
+    <svg width="56" height="56" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="250" cy="249.507" rx="250" ry="249.507" fill="rgba(255,255,255,0.2)"/>
+      <path d="M350.584 128.237C330.142 127.446 312.985 142.175 309.965 161.556H309.833C309.361 166.849 304.907 170.992 299.489 170.992C294.072 170.992 289.561 166.792 289.146 161.462C286.164 142.627 269.818 128.219 250.113 128.219C230.408 128.219 214.005 142.665 211.061 161.556H210.985C210.513 166.849 206.059 170.992 200.642 170.992C195.225 170.992 190.77 166.849 190.299 161.556H190.242C187.297 142.665 170.933 128.219 151.19 128.219C151.152 128.219 151.114 128.219 151.077 128.219C151.039 128.219 151.001 128.219 150.963 128.219C129.144 128.219 111.439 145.867 111.439 167.659V331.371C111.439 353.144 129.125 370.811 150.963 370.811C172.783 370.811 190.487 353.162 190.487 331.371V289.915C190.619 289.068 190.695 288.22 190.695 287.335V204.462H190.752C190.752 199.056 195.149 194.668 200.566 194.668C205.984 194.668 210.381 199.056 210.381 204.462H210.57V255.41C210.57 276.486 226.897 294.323 247.999 295.415C270.781 296.602 289.618 278.501 289.618 256.031V204.462H289.656C289.656 199 294.091 194.555 299.584 194.555C305.076 194.555 309.512 198.981 309.512 204.462V330.749C309.512 351.825 325.839 369.662 346.941 370.754C369.723 371.941 388.56 353.84 388.56 331.371V168.337C388.56 147.035 371.931 129.066 350.602 128.237H350.584Z" fill="white"/>
+    </svg>
+    
+    <p style="font-size:22px;font-weight:800;color:#fff;margin-bottom:4px">amichis</p>
+    <p id="pin-label" style="font-size:13px;color:rgba(255,255,255,.75);margin-bottom:28px">Ingresá tu PIN</p>
+    <div id="pin-dots" style="display:flex;gap:12px;margin-bottom:32px">
+      <div class="pind"></div><div class="pind"></div><div class="pind"></div><div class="pind"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,72px);gap:12px">
+      <button class="pinbtn" onclick="pinTap('1')">1</button>
+      <button class="pinbtn" onclick="pinTap('2')">2</button>
+      <button class="pinbtn" onclick="pinTap('3')">3</button>
+      <button class="pinbtn" onclick="pinTap('4')">4</button>
+      <button class="pinbtn" onclick="pinTap('5')">5</button>
+      <button class="pinbtn" onclick="pinTap('6')">6</button>
+      <button class="pinbtn" onclick="pinTap('7')">7</button>
+      <button class="pinbtn" onclick="pinTap('8')">8</button>
+      <button class="pinbtn" onclick="pinTap('9')">9</button>
+      <div></div>
+      <button class="pinbtn" onclick="pinTap('0')">0</button>
+      <button class="pinbtn" onclick="pinDel()" style="font-size:20px">⌫</button>
+    </div>
+    <button id="pin-skip" onclick="pinSkip()" style="margin-top:24px;background:none;border:none;color:rgba(255,255,255,.6);font-size:13px;font-weight:600;cursor:pointer">Entrar sin PIN</button>
+  </div>
+
+  <!-- ── SETTINGS ── -->
   <div id="settings">
     <div class="ov-hdr">
       <button class="ic-btn" onclick="closeSettings()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2033" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -306,18 +342,42 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
       <div style="width:34px"></div>
     </div>
     <div class="ov-body">
-      <div class="card mb12" style="text-align:center;padding:24px 16px">
-        <div id="sett-av" class="av" style="width:72px;height:72px;font-size:26px;margin:0 auto 10px;background:var(--o)" onclick="cycleAvColor()"></div>
-        <p class="f11 col-g mb16">Toca el avatar para cambiar color</p>
+      <!-- Profile card -->
+      <div class="card mb12" style="text-align:center;padding:20px 16px">
+        <input type="file" id="sett-photo-file" accept="image/*" style="display:none" onchange="handleSettPhoto(event)"/>
+        <div style="position:relative;width:80px;margin:0 auto 10px">
+          <div id="sett-av" class="av" style="width:80px;height:80px;font-size:28px;background:var(--o);overflow:hidden;background-size:cover;background-position:center" onclick="document.getElementById('sett-photo-file').click()"></div>
+          <div onclick="document.getElementById('sett-photo-file').click()" style="position:absolute;bottom:0;right:0;width:24px;height:24px;background:var(--n);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--bg)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+        </div>
+        <!-- Color dots -->
+        <div style="display:flex;gap:7px;justify-content:center;margin-bottom:14px" id="sett-colors"></div>
         <div class="f-grp mb8">
           <label class="f-lbl">Tu nombre</label>
-          <input class="f-inp" id="sett-name" type="text" placeholder="Ej: Laura..." oninput="saveProfile()"/>
+          <input class="f-inp" id="sett-name" type="text" placeholder="Ej: Laura..."/>
         </div>
-        <div class="f-grp" style="margin-bottom:0">
+        <div class="f-grp mb12">
           <label class="f-lbl">Nombre del negocio</label>
-          <input class="f-inp" id="sett-biz" type="text" placeholder="Ej: Amichis..." oninput="saveProfile()"/>
+          <input class="f-inp" id="sett-biz" type="text" placeholder="Ej: Amichis..."/>
+        </div>
+        <button onclick="saveProfileBtn()" style="width:100%;background:var(--o);color:#fff;border:none;border-radius:50px;padding:13px;font-size:13px;font-weight:800;cursor:pointer">Guardar perfil</button>
+      </div>
+
+      <!-- PIN -->
+      <div class="card mb12">
+        <p class="f13 col-n mb8" style="font-weight:700">Seguridad</p>
+        <div id="pin-set-row">
+          <p class="f11 col-g mb8" id="pin-status-txt">Sin PIN configurado</p>
+          <div class="row gap8">
+            <input class="f-inp" id="pin-inp" type="password" inputmode="numeric" maxlength="4" placeholder="Nuevo PIN (4 dígitos)" style="flex:1;padding:11px 14px;font-size:14px"/>
+            <button onclick="savePin()" style="background:var(--n);color:#fff;border:none;border-radius:50px;padding:11px 18px;font-size:12px;font-weight:800;cursor:pointer">Guardar</button>
+          </div>
+          <button id="pin-remove-btn" onclick="removePin()" style="display:none;margin-top:8px;width:100%;background:#FFF0F2;color:var(--c);border:none;border-radius:50px;padding:10px;font-size:12px;font-weight:700;cursor:pointer">Eliminar PIN</button>
         </div>
       </div>
+
+      <!-- Stats -->
       <div class="card mb12">
         <div class="row between" style="padding:4px 0"><span class="f13 col-n" style="font-weight:700">Productos registrados</span><span id="sett-pc" class="f13 col-g">0</span></div>
         <div class="sep"></div>
@@ -325,6 +385,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
         <div class="sep"></div>
         <div class="row between" style="padding:4px 0"><span class="f13 col-n" style="font-weight:700">Versión</span><span class="f13 col-g">1.0.0 beta</span></div>
       </div>
+
       <button onclick="logOut()" style="width:100%;background:#FFF0F2;color:var(--c);border:none;border-radius:16px;padding:15px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--c)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Cerrar sesión
@@ -386,7 +447,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
       <div class="s-circ"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6DCBB0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <p style="font-size:20px;font-weight:800;color:var(--n);margin-bottom:4px">Venta registrada</p>
       <p id="conf-num" class="f13 col-g mb16">#1043</p>
-      <div style="background:var(--bg);border-radius:16px;padding:16px;text-align:left;margin-bottom:20px">
+      <div style="background:var(--bg);border-radius:16px;padding:16px;text-align:left;margin-bottom:12px">
         <div id="conf-items" class="mb8"></div>
         <div class="sep"></div>
         <div class="row between mt8"><span class="f12 col-g">Descuento</span><span id="conf-disc" class="f12 col-o" style="font-weight:700">—</span></div>
@@ -394,6 +455,14 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
         <div class="row between mt8"><span class="f12 col-g">Pago</span><span id="conf-pay" class="f12 col-n" style="font-weight:700">—</span></div>
         <div class="row between mt8"><span class="f12 col-g">Tipo</span><span id="conf-type" class="f12 col-n" style="font-weight:700">—</span></div>
         <div class="row between mt8"><span class="f12 col-g">Estado</span><span id="conf-status" class="bg-tag bg-green">Completada</span></div>
+      </div>
+      <!-- Pending payment toggle — only shown for delivery -->
+      <div id="conf-pending-wrap" style="display:none;margin-bottom:14px">
+        <button id="conf-pending-btn" onclick="togglePendingPay()" style="width:100%;background:#FFF7ED;border:2px solid #FEE9C3;color:#92400E;border-radius:14px;padding:13px 16px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left">
+          <span id="conf-pending-ico" style="font-size:18px;flex-shrink:0">💳</span>
+          <span id="conf-pending-txt">Marcar como pendiente de pago</span>
+        </button>
+        <p id="conf-pending-sub" class="f11 col-g" style="margin-top:6px;padding:0 4px">El pago se registrará cuando confirmes la cobro</p>
       </div>
       <button class="btn-o" style="width:100%;justify-content:center" onclick="closeVenta();showView('dashboard')">Confirmar venta</button>
     </div>
@@ -595,13 +664,19 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI
       <div id="es-summary" class="card mb16" style="background:#F9F8F6"></div>
       <!-- Estado -->
       <p class="f-lbl mb8">Estado</p>
-      <div class="row gap8 mb16" id="es-status-row">
+      <div class="row gap8 mb12" id="es-status-row">
         <div id="es-st-comp" onclick="esSelStatus('completada')" style="flex:1;border:2px solid transparent;border-radius:14px;padding:12px;text-align:center;cursor:pointer;background:var(--w);transition:all .15s">
           <p class="f12 col-n" style="font-weight:700">✓ Completada</p>
         </div>
         <div id="es-st-prep" onclick="esSelStatus('en-preparacion')" style="flex:1;border:2px solid transparent;border-radius:14px;padding:12px;text-align:center;cursor:pointer;background:var(--w);transition:all .15s">
           <p class="f12 col-n" style="font-weight:700">⏳ En preparación</p>
         </div>
+      </div>
+      <!-- Pending pay toggle (delivery only) -->
+      <div id="es-pending-wrap" style="display:none;margin-bottom:12px">
+        <button id="es-pending-btn" onclick="esTogglePending()" style="width:100%;background:#FFF7ED;border:2px solid #FEE9C3;color:#92400E;border-radius:14px;padding:12px 14px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px">
+          <span id="es-pending-ico">💳</span><span id="es-pending-txt">Marcar como pendiente de pago</span>
+        </button>
       </div>
       <!-- Pago -->
       <p class="f-lbl mb4">Método de pago</p>
@@ -663,28 +738,127 @@ const AV_COLORS = ['#FF4B2B','#F01D52','#6DCBB0','#1C2033','#7C3AED','#1E40AF','
 const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
+// ─── LOCALSTORAGE ─────────────────────────────────────
+function lsSave(){
+  try{
+    localStorage.setItem('ami_profile', JSON.stringify(profile));
+    localStorage.setItem('ami_prods',   JSON.stringify(PRODS));
+    localStorage.setItem('ami_sales',   JSON.stringify(SALES));
+    localStorage.setItem('ami_cats',    JSON.stringify(CATS));
+  }catch(e){}
+}
+function lsLoad(){
+  try{
+    const p=localStorage.getItem('ami_profile'); if(p) Object.assign(profile, JSON.parse(p));
+    const pr=localStorage.getItem('ami_prods');  if(pr) PRODS.splice(0,PRODS.length,...JSON.parse(pr));
+    const sa=localStorage.getItem('ami_sales');  if(sa) SALES.splice(0,SALES.length,...JSON.parse(sa));
+    const ca=localStorage.getItem('ami_cats');   if(ca) CATS.splice(0,CATS.length,...JSON.parse(ca));
+  }catch(e){}
+}
+
+// ─── PIN ──────────────────────────────────────────────
+let pinBuffer='';
+function getPin(){ try{ return localStorage.getItem('ami_pin')||''; }catch(e){return '';} }
+function setPin(v){ try{ localStorage.setItem('ami_pin',v); }catch(e){} }
+function removePin(){ try{ localStorage.removeItem('ami_pin'); }catch(e){} updatePinStatus(); }
+
+function initPinScreen(){
+  const pin=getPin();
+  const skip=document.getElementById('pin-skip');
+  if(!pin){ pinSkip(); return; }
+  if(skip) skip.style.display='none';
+  pinBuffer=''; updatePinDots();
+  document.getElementById('pin-screen').style.display='flex';
+  document.getElementById('pin-label').textContent='Ingresá tu PIN';
+}
+function pinTap(d){
+  if(pinBuffer.length>=4) return;
+  pinBuffer+=d; updatePinDots();
+  if(pinBuffer.length===4){
+    if(pinBuffer===getPin()){ setTimeout(pinSkip,200); }
+    else{ setTimeout(()=>{ pinBuffer=''; updatePinDots(); document.getElementById('pin-label').textContent='PIN incorrecto, intentá de nuevo'; },400); }
+  }
+}
+function pinDel(){ pinBuffer=pinBuffer.slice(0,-1); updatePinDots(); }
+function updatePinDots(){
+  document.querySelectorAll('.pind').forEach((d,i)=>d.classList.toggle('on',i<pinBuffer.length));
+}
+function pinSkip(){ document.getElementById('pin-screen').style.display='none'; }
+
+function updatePinStatus(){
+  const has=!!getPin();
+  const txt=document.getElementById('pin-status-txt');
+  const rb=document.getElementById('pin-remove-btn');
+  if(txt) txt.textContent=has?'PIN activo configurado':'Sin PIN configurado';
+  if(rb)  rb.style.display=has?'block':'none';
+}
+function savePin(){
+  const v=(document.getElementById('pin-inp').value||'').trim();
+  if(!/^\d{4}$/.test(v)){ alert('El PIN debe ser de 4 dígitos'); return; }
+  setPin(v); document.getElementById('pin-inp').value='';
+  updatePinStatus(); alert('PIN guardado correctamente');
+}
+
 // ─── PROFILE ─────────────────────────────────────────
-let profile = {name:'Laura', biz:'Amichis', color:'#FF4B2B'};
+let profile = {name:'Laura', biz:'Amichis', color:'#FF4B2B', photo:null};
 let avColorIdx = 0;
 
-function saveProfile(){
-  profile.name = document.getElementById('sett-name').value || profile.name;
-  profile.biz  = document.getElementById('sett-biz').value  || profile.biz;
-  refreshAvatar();
-}
 function refreshAvatar(){
   const init = (profile.name||'?')[0].toUpperCase();
   ['hdr-av','sett-av'].forEach(id=>{
     const el=document.getElementById(id);
     if(!el) return;
-    el.textContent=init;
-    el.style.background=profile.color;
+    if(profile.photo){
+      el.textContent='';
+      el.style.backgroundImage=`url('${profile.photo}')`;
+      el.style.backgroundSize='cover';
+      el.style.backgroundPosition='center';
+      el.style.background='';
+    } else {
+      el.textContent=init;
+      el.style.backgroundImage='';
+      el.style.background=profile.color;
+    }
   });
+}
+function handleSettPhoto(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    profile.photo=ev.target.result;
+    const av=document.getElementById('sett-av');
+    av.textContent='';
+    av.style.backgroundImage=`url('${profile.photo}')`;
+    av.style.backgroundSize='cover';
+    av.style.backgroundPosition='center';
+  };
+  r.readAsDataURL(file);
+}
+function saveProfileBtn(){
+  profile.name = document.getElementById('sett-name').value.trim() || profile.name;
+  profile.biz  = document.getElementById('sett-biz').value.trim()  || profile.biz;
+  refreshAvatar(); lsSave();
+  const btn=document.querySelector('#settings .btn-o')||document.querySelector('[onclick="saveProfileBtn()"]');
+  const orig=btn?btn.textContent:''; if(btn){ btn.textContent='✓ Guardado'; setTimeout(()=>{ btn.textContent=orig; },1500); }
 }
 function cycleAvColor(){
   avColorIdx = (avColorIdx+1) % AV_COLORS.length;
-  profile.color = AV_COLORS[avColorIdx];
-  refreshAvatar();
+  profile.color = AV_COLORS[avColorIdx]; profile.photo=null;
+  const av=document.getElementById('sett-av');
+  av.style.backgroundImage=''; av.style.background=profile.color;
+  av.textContent=(profile.name||'?')[0].toUpperCase();
+  renderSettColors();
+}
+function renderSettColors(){
+  const el=document.getElementById('sett-colors'); if(!el)return;
+  el.innerHTML=AV_COLORS.map((c,i)=>`<div onclick="setAvColor('${c}')" style="width:22px;height:22px;border-radius:50%;background:${c};cursor:pointer;border:2px solid ${c===profile.color&&!profile.photo?'var(--n)':'transparent'};transition:border .15s"></div>`).join('');
+}
+function setAvColor(c){
+  profile.color=c; profile.photo=null;
+  const av=document.getElementById('sett-av');
+  av.style.backgroundImage=''; av.style.background=c;
+  av.textContent=(profile.name||'?')[0].toUpperCase();
+  renderSettColors();
 }
 
 // ─── SETTINGS ────────────────────────────────────────
@@ -693,21 +867,25 @@ function openSettings(){
   document.getElementById('sett-biz').value  = profile.biz;
   document.getElementById('sett-pc').textContent = PRODS.length;
   document.getElementById('sett-sc').textContent = SALES.length;
-  document.getElementById('sett-av').textContent = profile.name[0].toUpperCase();
-  document.getElementById('sett-av').style.background = profile.color;
+  // Avatar preview
+  const av=document.getElementById('sett-av');
+  if(profile.photo){ av.textContent=''; av.style.backgroundImage=`url('${profile.photo}')`; av.style.backgroundSize='cover'; av.style.backgroundPosition='center'; }
+  else { av.textContent=(profile.name||'?')[0].toUpperCase(); av.style.backgroundImage=''; av.style.background=profile.color; }
+  renderSettColors();
+  updatePinStatus();
   document.getElementById('settings').classList.add('open');
 }
 function closeSettings(){ document.getElementById('settings').classList.remove('open'); }
-function logOut(){ closeSettings(); alert('Sesión cerrada.\n(En producción redirige al login)'); }
+function logOut(){ closeSettings(); lsSave(); initPinScreen(); }
 
 // ─── NAV ─────────────────────────────────────────────
 const VIEWS = ['dashboard','stock','ventas','reportes'];
 const NAV_K = {dashboard:'d',stock:'s',ventas:'v',reportes:'r'};
 const TITLES = {
-  dashboard:['','Tu negocio hoy'],
-  stock:['','Gestión de stock'],
-  ventas:['','Ventas'],
-  reportes:['','Reportes'],
+  dashboard:'Tu negocio hoy',
+  stock:'Stock',
+  ventas:'Ventas',
+  reportes:'Reportes',
 };
 
 function showView(v){
@@ -718,9 +896,7 @@ function showView(v){
     if(lbl){lbl.style.color=c; lbl.classList.toggle('on',on);}
     if(ico) ico.setAttribute('stroke',c);
   });
-  const t=TITLES[v];
-  document.getElementById('hdr-sub').textContent=t[0];
-  document.getElementById('hdr-title').textContent=t[1];
+  document.getElementById('hdr-title').textContent=TITLES[v]||'';
   document.getElementById('main').scrollTop=0;
   if(v==='dashboard') renderDash();
   if(v==='stock'){ renderStCats(); renderStock(); }
@@ -759,7 +935,7 @@ function renderDash(){
   document.getElementById('dash-sales').innerHTML = SALES.slice(0,3).map(s=>{
     const payL = PAYS.find(p=>p.id===s.pay)?.label||s.pay;
     const items = s.items.map(i=>{ const p=PRODS.find(x=>x.id===i.pid); return p?p.name.split(' ').slice(0,2).join(' '):'' }).join(' + ');
-    const stHtml = s.status==='completada' ? '<span class="bg-tag bg-green">Completada</span>' : '<span class="bg-tag bg-amber">En preparación</span>';
+    const stHtml = saleStatusHtml(s);
     return `<div class="card row between mb8"><div><p class="f12 col-n" style="font-weight:700">#${s.id} ${s.type==='truck'?'🏪':'📦'} ${items}</p><p class="f10 col-g mt4">${payL} · ${s.ts}hs</p></div><div style="text-align:right"><p class="f13 col-n" style="font-weight:800">${fmt(s.total)}</p>${stHtml}</div></div>`;
   }).join('');
 
@@ -855,16 +1031,18 @@ function deleteProd(){
 }
 
 // ─── EDIT SALE ───────────────────────────────────────
-let esId=null, esPay=null, esStatus=null;
+let esId=null, esPay=null, esStatus=null, esPendingPay=false;
 function openEditSale(id){
   const s=SALES.find(x=>x.id===id); if(!s) return;
-  esId=id; esPay=s.pay; esStatus=s.status;
+  esId=id; esPay=s.pay; esStatus=s.status; esPendingPay=s.pendingPay||false;
   const payL=PAYS.find(p=>p.id===s.pay)?.label||s.pay;
   const items=s.items.map(i=>{ const p=PRODS.find(x=>x.id===i.pid); return p?`${p.name.split(' ').slice(0,2).join(' ')} x${i.qty}`:'' }).join(' · ');
   document.getElementById('es-summary').innerHTML=`<div class="row between mb4"><span class="f12 col-n" style="font-weight:700">#${s.id} ${s.type==='truck'?'🏪 Foodtruck':'📦 Delivery'}</span><span class="f13 col-n" style="font-weight:800">${fmt(s.total)}</span></div><p class="f10 col-g">${items}</p>`;
   const showPrep=s.type==='delivery';
   document.getElementById('es-status-row').style.display=showPrep?'flex':'none';
+  document.getElementById('es-pending-wrap').style.display=showPrep?'block':'none';
   esSelStatus(s.status);
+  esRenderPendingBtn();
   document.getElementById('es-pay-grid').innerHTML=PAYS.map(p=>`<div class="pay-tile${esPay===p.id?' on':''}" id="es-pt-${p.id}" onclick="esSelPay('${p.id}')"><div class="pay-ico" style="background:${p.bg}">${p.ic}</div><span class="f12 col-n" style="font-weight:700">${p.label}</span></div>`).join('');
   document.getElementById('edit-sale').classList.add('open');
 }
@@ -875,13 +1053,29 @@ function esSelStatus(st){
   if(comp){ comp.style.borderColor=st==='completada'?'var(--o)':'transparent'; comp.style.background=st==='completada'?'#FFF5F3':'var(--w)'; }
   if(prep){ prep.style.borderColor=st==='en-preparacion'?'var(--o)':'transparent'; prep.style.background=st==='en-preparacion'?'#FFF5F3':'var(--w)'; }
 }
+function esTogglePending(){
+  esPendingPay=!esPendingPay; esRenderPendingBtn();
+}
+function esRenderPendingBtn(){
+  const btn=document.getElementById('es-pending-btn');
+  const ico=document.getElementById('es-pending-ico');
+  const txt=document.getElementById('es-pending-txt');
+  if(!btn)return;
+  if(esPendingPay){
+    btn.style.background='#FFF0F2'; btn.style.borderColor='var(--c)'; btn.style.color='var(--c)';
+    ico.textContent='⏳'; txt.textContent='Pago pendiente — toca para desmarcar';
+  } else {
+    btn.style.background='#FFF7ED'; btn.style.borderColor='#FEE9C3'; btn.style.color='#92400E';
+    ico.textContent='💳'; txt.textContent='Marcar como pendiente de pago';
+  }
+}
 function esSelPay(id){
   esPay=id;
   PAYS.forEach(p=>{ const el=document.getElementById('es-pt-'+p.id); if(el)el.classList.toggle('on',p.id===id); });
 }
 function saveEditSale(){
   const s=SALES.find(x=>x.id===esId); if(!s)return;
-  s.pay=esPay||s.pay; s.status=esStatus||s.status;
+  s.pay=esPay||s.pay; s.status=esStatus||s.status; s.pendingPay=esPendingPay;
   closeEditSale(); renderVentasList();
 }
 function deleteSale(){
@@ -893,25 +1087,34 @@ function deleteSale(){
 }
 
 // ─── VENTAS LIST ─────────────────────────────────────
+function saleStatusHtml(s){
+  if(s.pendingPay) return '<span class="bg-tag" style="background:#FFF0F2;color:var(--c);font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700;white-space:nowrap">Pago pendiente</span>';
+  if(s.status==='completada') return '<span class="bg-tag bg-green">Completada</span>';
+  return '<span class="bg-tag bg-amber">En preparación</span>';
+}
 function renderVentasList(){
   document.getElementById('ventas-list').innerHTML = SALES.map(s=>{
     const payL=PAYS.find(p=>p.id===s.pay)?.label||s.pay;
     const items=s.items.map(i=>{ const p=PRODS.find(x=>x.id===i.pid); return p?`${p.name.split(' ').slice(0,2).join(' ')} ×${i.qty}`:'' }).join(' · ');
-    const stHtml=s.status==='completada'?'<span class="bg-tag bg-green">Completada</span>':'<span class="bg-tag bg-amber">En preparación</span>';
+    const needsAction = s.status==='en-preparacion' || s.pendingPay;
     return `<div class="card mb8">
       <div class="row between mb8">
         <div><p class="f12 col-n" style="font-weight:700">#${s.id} ${s.type==='truck'?'🏪':'📦'}</p><p class="f10 col-g mt4">${payL} · ${s.ts}hs</p></div>
-        <div class="row gap8">${stHtml}<button onclick="openEditSale(${s.id})" style="width:30px;height:30px;background:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">
+        <div class="row gap8">${saleStatusHtml(s)}<button onclick="openEditSale(${s.id})" style="width:30px;height:30px;background:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </button></div>
       </div>
       <div style="height:.5px;background:rgba(0,0,0,.07);margin:0 0 8px"></div>
       <div class="row between"><span class="f10 col-g">${items}</span><span class="f13 col-n" style="font-weight:800">${fmt(s.total)}</span></div>
-      ${s.status==='en-preparacion'?`<button onclick="markDone(${s.id})" style="margin-top:10px;width:100%;background:#E8FBF5;color:#065F46;border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">✓ Marcar como completada</button>`:''}
+      ${needsAction ? `<div class="row gap8 mt8">
+        ${s.pendingPay ? `<button onclick="markPaid(${s.id})" style="flex:1;background:#E8FBF5;color:#065F46;border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">💰 Confirmar cobro</button>` : ''}
+        ${s.status==='en-preparacion' ? `<button onclick="markDone(${s.id})" style="flex:1;background:#EEF2FF;color:#3730A3;border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">✓ Entregada</button>` : ''}
+      </div>` : ''}
     </div>`;
   }).join('');
 }
-function markDone(id){ const s=SALES.find(x=>x.id===id); if(s) s.status='completada'; renderVentasList(); }
+function markDone(id){ const s=SALES.find(x=>x.id===id); if(s){ s.status='completada'; } renderVentasList(); lsSave(); }
+function markPaid(id){ const s=SALES.find(x=>x.id===id); if(s){ s.pendingPay=false; s.status='completada'; } renderVentasList(); lsSave(); }
 
 // ─── VENTA FLOW ──────────────────────────────────────
 let cart={}, vPay=null, vStep=0, vType='truck';
@@ -1005,17 +1208,55 @@ function confirmVenta(){
   const disc=parseFloat(document.getElementById('disc')?.value)||0;
   const sub=cartSub(), tot=cartTotal();
   let h='';
-  const newS={id:1040+SALES.length+1,items:[],total:tot,pay:vPay,type:vType,status:vType==='delivery'?'en-preparacion':'completada',ts:new Date().toTimeString().slice(0,5)};
+  const isDelivery=vType==='delivery';
+  const newS={id:1040+SALES.length+1,items:[],total:tot,pay:vPay,type:vType,status:isDelivery?'en-preparacion':'completada',pendingPay:false,ts:new Date().toTimeString().slice(0,5)};
   Object.entries(cart).forEach(([id,q])=>{ const p=PRODS.find(x=>x.id==id); if(!p)return; h+=`<div class="row between mb8"><span class="f12 col-n">${p.name} ×${q}</span><span class="f12 col-n" style="font-weight:700">${fmt(p.price*q)}</span></div>`; p.stock=Math.max(0,p.stock-q); newS.items.push({pid:p.id,qty:q}); });
   SALES.unshift(newS);
   document.getElementById('conf-items').innerHTML=h;
   document.getElementById('conf-disc').textContent=disc>0?`−${disc}%`:'—';
   document.getElementById('conf-total').textContent=fmt(tot);
   document.getElementById('conf-pay').textContent=payObj?payObj.label:'—';
-  document.getElementById('conf-type').textContent=vType==='truck'?'🏪 Foodtruck':'📦 Delivery';
-  document.getElementById('conf-status').textContent=vType==='delivery'?'En preparación':'Completada';
-  document.getElementById('conf-status').className=`bg-tag ${vType==='delivery'?'bg-amber':'bg-green'}`;
+  document.getElementById('conf-type').textContent=isDelivery?'📦 Delivery':'🏪 Foodtruck';
+  document.getElementById('conf-status').textContent=isDelivery?'En preparación':'Completada';
+  document.getElementById('conf-status').className=`bg-tag ${isDelivery?'bg-amber':'bg-green'}`;
   document.getElementById('conf-num').textContent='#'+newS.id;
+  // Show pending payment toggle only for delivery
+  document.getElementById('conf-pending-wrap').style.display=isDelivery?'block':'none';
+  document.getElementById('conf-pending-btn').dataset.saleId=newS.id;
+  resetPendingBtn();
+}
+function resetPendingBtn(){
+  const btn=document.getElementById('conf-pending-btn');
+  btn.style.background='#FFF7ED'; btn.style.borderColor='#FEE9C3'; btn.style.color='#92400E';
+  document.getElementById('conf-pending-ico').textContent='💳';
+  document.getElementById('conf-pending-txt').textContent='Marcar como pendiente de pago';
+  document.getElementById('conf-pending-sub').textContent='El pago se registrará cuando confirmes el cobro';
+  btn.dataset.active='0';
+}
+function togglePendingPay(){
+  const btn=document.getElementById('conf-pending-btn');
+  const isActive=btn.dataset.active==='1';
+  const saleId=parseInt(btn.dataset.saleId);
+  const sale=SALES.find(x=>x.id===saleId); if(!sale) return;
+  if(!isActive){
+    // Activate pending
+    sale.pendingPay=true;
+    btn.style.background='#FFF0F2'; btn.style.borderColor='var(--c)'; btn.style.color='var(--c)';
+    document.getElementById('conf-pending-ico').textContent='⏳';
+    document.getElementById('conf-pending-txt').textContent='Pago pendiente — toca para desmarcar';
+    document.getElementById('conf-pending-sub').textContent='Esta venta aparecerá como pendiente de cobro';
+    document.getElementById('conf-status').textContent='Pendiente de pago';
+    document.getElementById('conf-status').className='bg-tag';
+    document.getElementById('conf-status').style.cssText='background:#FFF0F2;color:var(--c);font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700';
+    btn.dataset.active='1';
+  } else {
+    // Deactivate
+    sale.pendingPay=false;
+    document.getElementById('conf-status').textContent='En preparación';
+    document.getElementById('conf-status').className='bg-tag bg-amber';
+    document.getElementById('conf-status').style.cssText='';
+    resetPendingBtn();
+  }
 }
 
 // ─── ADD PRODUCT ─────────────────────────────────────
@@ -1201,8 +1442,24 @@ function setFmtVal(id, num){
 }
 
 // ─── INIT ────────────────────────────────────────────
+lsLoad();
 refreshAvatar();
 showView('dashboard');
+initPinScreen();
+
+// Auto-save on data mutations
+const _origConfirmVenta = confirmVenta;
+confirmVenta = function(){ _origConfirmVenta(); lsSave(); };
+const _origConfirmAdd = confirmAddProd;
+confirmAddProd = function(){ _origConfirmAdd(); lsSave(); };
+const _origSaveSS = saveSS;
+saveSS = function(){ _origSaveSS(); lsSave(); };
+const _origDelProd = deleteProd;
+deleteProd = function(){ _origDelProd(); lsSave(); };
+const _origSaveES = saveEditSale;
+saveEditSale = function(){ _origSaveES(); lsSave(); };
+const _origDelSale = deleteSale;
+deleteSale = function(){ _origDelSale(); lsSave(); };
 </script>
 </body>
 </html>
